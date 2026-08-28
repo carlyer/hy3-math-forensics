@@ -1,0 +1,10 @@
+# 项目额外依赖（基础环境 /path/to/venv 已包含 torch、vllm、transformers）
+sympy>=1.12
+numpy>=1.26
+pandas>=2.0
+tqdm>=4.65
+pydantic>=2.0
+python-dotenv>=1.0
+antlr4-python3-runtime==4.11
+fastapi>=0.110
+uvicorn>=0.25

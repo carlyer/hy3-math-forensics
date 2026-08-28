@@ -1,0 +1,249 @@
+{
+  "total": 146,
+  "by_level": {
+    "L1": 30,
+    "L2": 35,
+    "L3": 47,
+    "L4": 34
+  },
+  "by_source": {
+    "AGIEval": 15,
+    "AIME": 25,
+    "AMC/AIME-HF": 9,
+    "AMC12": 10,
+    "GSM8K": 18,
+    "MATH": 32,
+    "Math23K": 12,
+    "OlympiadBench": 15,
+    "Omni-MATH": 10
+  },
+  "by_answer_type": {
+    "choice": 14,
+    "expression": 11,
+    "float": 1,
+    "integer": 108,
+    "list": 3,
+    "rational": 9
+  },
+  "self_check_failures": {
+    "count": 0,
+    "samples": []
+  },
+  "suspicious_records": {
+    "count": 6,
+    "records": [
+      {
+        "id": "L1-026",
+        "source": "Math23K",
+        "level": "L1",
+        "answer_type": "integer",
+        "problem_preview": "157与343的和除以25与2的积，商=．",
+        "answer_preview": "10",
+        "reasons": [
+          "problem 过短 (21 字符)"
+        ]
+      },
+      {
+        "id": "L4-026",
+        "source": "AMC/AIME-HF",
+        "level": "L4",
+        "answer_type": "integer",
+        "problem_preview": "The figure below depicts a regular $7$-gon inscribed in a unit circle.\n[asy]         import geometry; unitsize(3cm); dra",
+        "answer_preview": "47.0",
+        "reasons": [
+          "answer_type=integer 但 answer 不是整数: '47.0'"
+        ]
+      },
+      {
+        "id": "L4-027",
+        "source": "AMC/AIME-HF",
+        "level": "L4",
+        "answer_type": "integer",
+        "problem_preview": "Let $M$ be the midpoint of $\\overline{AB}$ in regular tetrahedron $ABCD$.  $\\frac{p}{q}=\\cos(\\angle CMD)$ is irreducible",
+        "answer_preview": "4.0",
+        "reasons": [
+          "answer_type=integer 但 answer 不是整数: '4.0'"
+        ]
+      },
+      {
+        "id": "L4-029",
+        "source": "AMC/AIME-HF",
+        "level": "L4",
+        "answer_type": "integer",
+        "problem_preview": "Let $P(x)$ be a polynomial with rational coefficients such that when $P(x)$ is divided by the polynomial\n$x^2 + x + 1$, ",
+        "answer_preview": "23.0",
+        "reasons": [
+          "answer_type=integer 但 answer 不是整数: '23.0'"
+        ]
+      },
+      {
+        "id": "L4-032",
+        "source": "AMC/AIME-HF",
+        "level": "L4",
+        "answer_type": "integer",
+        "problem_preview": "Let $h_n$ and $k_n$ be the unique relatively prime positive integers such that \\[\\frac{1}{1}+\\frac{1}{2}+\\frac{1}{3}+\\cd",
+        "answer_preview": "8.0",
+        "reasons": [
+          "answer_type=integer 但 answer 不是整数: '8.0'"
+        ]
+      },
+      {
+        "id": "L4-034",
+        "source": "AMC/AIME-HF",
+        "level": "L4",
+        "answer_type": "integer",
+        "problem_preview": "How many nonempty subsets $B$ of ${0, 1, 2, 3, \\cdots, 12}$ have the property that the number of elements in $B$ is equa",
+        "answer_preview": "144.0",
+        "reasons": [
+          "answer_type=integer 但 answer 不是整数: '144.0'"
+        ]
+      }
+    ]
+  },
+  "answer_type_examples": {
+    "choice": [
+      {
+        "id": "L2-021",
+        "source": "AGIEval",
+        "answer": "(C)10",
+        "verification": {
+          "method": "choice_match"
+        }
+      },
+      {
+        "id": "L2-022",
+        "source": "AGIEval",
+        "answer": "(A)126km",
+        "verification": {
+          "method": "choice_match"
+        }
+      },
+      {
+        "id": "L2-023",
+        "source": "AGIEval",
+        "answer": "(C)74325",
+        "verification": {
+          "method": "choice_match"
+        }
+      }
+    ],
+    "expression": [
+      {
+        "id": "L1-021",
+        "source": "Math23K",
+        "answer": "((2)/(35))",
+        "verification": {
+          "method": "symbolic_equivalence"
+        }
+      },
+      {
+        "id": "L1-025",
+        "source": "Math23K",
+        "answer": "((8)/(39))",
+        "verification": {
+          "method": "symbolic_equivalence"
+        }
+      },
+      {
+        "id": "L2-007",
+        "source": "MATH",
+        "answer": "\\dfrac{2469}{20,\\!000}",
+        "verification": {
+          "method": "symbolic_equivalence"
+        }
+      }
+    ],
+    "float": [
+      {
+        "id": "L1-023",
+        "source": "Math23K",
+        "answer": "6.8",
+        "verification": {
+          "method": "numeric_tolerance",
+          "tolerance": 0.0001
+        }
+      }
+    ],
+    "integer": [
+      {
+        "id": "L1-001",
+        "source": "GSM8K",
+        "answer": "16",
+        "verification": {
+          "method": "exact_match"
+        }
+      },
+      {
+        "id": "L1-002",
+        "source": "GSM8K",
+        "answer": "19",
+        "verification": {
+          "method": "exact_match"
+        }
+      },
+      {
+        "id": "L1-003",
+        "source": "GSM8K",
+        "answer": "196",
+        "verification": {
+          "method": "exact_match"
+        }
+      }
+    ],
+    "list": [
+      {
+        "id": "L2-035",
+        "source": "AGIEval",
+        "answer": "[0]",
+        "verification": {
+          "method": "list_match",
+          "ordered": true
+        }
+      },
+      {
+        "id": "L3-010",
+        "source": "MATH",
+        "answer": "(4,1,4,0)",
+        "verification": {
+          "method": "list_match",
+          "ordered": true
+        }
+      },
+      {
+        "id": "L3-016",
+        "source": "OlympiadBench",
+        "answer": "5,-2",
+        "verification": {
+          "method": "list_match",
+          "ordered": true
+        }
+      }
+    ],
+    "rational": [
+      {
+        "id": "L2-002",
+        "source": "MATH",
+        "answer": "\\frac{1}{3}",
+        "verification": {
+          "method": "symbolic_equivalence"
+        }
+      },
+      {
+        "id": "L2-004",
+        "source": "MATH",
+        "answer": "\\frac{27}{128}",
+        "verification": {
+          "method": "symbolic_equivalence"
+        }
+      },
+      {
+        "id": "L2-018",
+        "source": "MATH",
+        "answer": "\\frac{3}{16}",
+        "verification": {
+          "method": "symbolic_equivalence"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "seed": 42,
+  "existing": {
+    "total": 158,
+    "by_level": {
+      "L1": 30,
+      "L2": 35,
+      "L3": 47,
+      "L4": 46
+    },
+    "by_verification": {
+      "exact_match": 111,
+      "symbolic_equivalence": 19,
+      "numeric_tolerance": 1,
+      "choice_match": 16,
+      "list_match": 2,
+      "manual_check": 9
+    },
+    "by_contamination_risk": {
+      "high": 77,
+      "medium": 69,
+      "low": 12
+    },
+    "by_source": {
+      "GSM8K": 18,
+      "Math23K": 12,
+      "MATH": 32,
+      "AGIEval": 15,
+      "OlympiadBench": 15,
+      "Omni-MATH": 10,
+      "AMC12": 10,
+      "AIME": 25,
+      "AMC/AIME-HF": 9,
+      "FrontierMath-v2": 12
+    }
+  },
+  "new_raw": {
+    "total": 779,
+    "by_level": {
+      "L1": 60,
+      "L2": 383,
+      "L3": 248,
+      "L4": 88
+    },
+    "by_verification": {
+      "numeric": 108,
+      "symbolic_equivalence": 45,
+      "choice": 377,
+      "manual_check": 249
+    },
+    "by_contamination_risk": {
+      "high": 421,
+      "low": 74,
+      "medium": 284
+    },
+    "by_problem_form": {
+      "open": 153,
+      "choice": 377,
+      "proof": 249
+    }
+  },
+  "deduplication": {
+    "duplicates_with_existing_removed": 9,
+    "internal_duplicates_removed": 0,
+    "available_after_dedup": 770,
+    "available_after_dedup_by_level": {
+      "L1": 60,
+      "L2": 375,
+      "L3": 248,
+      "L4": 87
+    }
+  },
+  "sampling": {
+    "L1": {
+      "available": 60,
+      "selected": 60,
+      "clusters_total": 20,
+      "clusters_complete": 20,
+      "auto_gradable": 60,
+      "manual_check": 0
+    },
+    "L2": {
+      "available": 375,
+      "selected": 65,
+      "auto_gradable": 65,
+      "manual_check": 0
+    },
+    "L3": {
+      "available": 248,
+      "selected": 46,
+      "auto_gradable": 36,
+      "manual_check": 10
+    },
+    "L4": {
+      "available": 87,
+      "selected": 57,
+      "auto_gradable": 52,
+      "manual_check": 5
+    }
+  },
+  "merged_v2": {
+    "total": 386,
+    "by_level": {
+      "L1": 90,
+      "L2": 100,
+      "L3": 93,
+      "L4": 103
+    },
+    "by_verification": {
+      "exact_match": 218,
+      "symbolic_equivalence": 47,
+      "numeric_tolerance": 1,
+      "choice_match": 94,
+      "list_match": 2,
+      "manual_check": 24
+    },
+    "by_contamination_risk": {
+      "high": 182,
+      "medium": 121,
+      "low": 83
+    },
+    "by_source": {
+      "GSM8K": 38,
+      "Math23K": 12,
+      "MATH": 32,
+      "AGIEval": 62,
+      "OlympiadBench": 15,
+      "Omni-MATH": 10,
+      "AMC12": 10,
+      "AIME": 25,
+      "AMC/AIME-HF": 9,
+      "FrontierMath-v2": 12,
+      "GSM-Plus/numerical substitution": 20,
+      "GSM-Plus/distraction insertion": 20,
+      "2026-Gaokao": 17,
+      "MATH/Level 2": 4,
+      "MATH/Level 3": 4,
+      "MMLU-Pro/math": 20,
+      "MiniF2F": 12,
+      "Omni-MATH/d5.0": 5,
+      "Omni-MATH/d5.25": 2,
+      "Omni-MATH/d5.5": 1,
+      "Omni-MATH/d7.0": 3,
+      "Omni-MATH/d6.5": 1,
+      "AIME-AMC12/train": 30,
+      "AIME-2025": 14,
+      "Omni-MATH/d8.0": 3,
+      "Omni-MATH/d9.5": 1,
+      "Omni-MATH/d9.0": 3,
+      "Omni-MATH/d8.5": 1
+    },
+    "by_problem_form": {
+      "NA": 158,
+      "open": 135,
+      "choice": 78,
+      "proof": 15
+    },
+    "new_ids_prefix": "EXT-",
+    "id_unique": true
+  }
+}

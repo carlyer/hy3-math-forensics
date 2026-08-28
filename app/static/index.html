@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hy3 数学解题过程评估 Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    .step-card { transition: all .2s; }
+    .step-card.error { border-left: 4px solid #ef4444; }
+    .step-card.ok { border-left: 4px solid #22c55e; }
+    .katex { font-size: 1.1em; }
+    #raw-output { white-space: pre-wrap; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <div class="max-w-5xl mx-auto p-4 md:p-6">
+    <!-- Header -->
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold text-slate-800">Hy3 数学解题过程评估 Demo</h1>
+      <p class="text-sm text-slate-500 mt-1">
+        基于 Hy3 生成解题过程，并自动评估推理链条的完整性与正确性。
+      </p>
+    </header>
+
+    <!-- Controls -->
+    <div class="bg-white rounded-xl shadow p-5 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+        <div class="md:col-span-8">
+          <label class="block text-sm font-semibold mb-1">题目</label>
+          <textarea id="problem-input" rows="4" placeholder="在此输入数学题，或从右侧题库选择..."
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+        <div class="md:col-span-4 space-y-3">
+          <div>
+            <label class="block text-sm font-semibold mb-1">从题库选择</label>
+            <select id="problem-select" class="w-full border border-gray-300 rounded-lg p-2">
+              <option value="">-- 选择内置题目 --</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1">难度层级</label>
+            <select id="level-select" class="w-full border border-gray-300 rounded-lg p-2">
+              <option value="auto">自动</option>
+              <option value="L1">L1 基础</option>
+              <option value="L2">L2 中等</option>
+              <option value="L3">L3 较难</option>
+              <option value="L4">L4 竞赛/研究</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1">标准答案（可选）</label>
+            <input id="gold-input" type="text" placeholder="用于自动校验最终答案"
+              class="w-full border border-gray-300 rounded-lg p-2" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced options -->
+      <div class="mt-4 border-t pt-4">
+        <button id="toggle-advanced" class="text-sm text-blue-600 hover:underline">展开高级选项</button>
+        <div id="advanced-panel" class="hidden mt-3 grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs text-gray-500">最大 token</label>
+            <input id="max-tokens" type="number" value="3072" min="256" max="8192" class="w-full border rounded p-2" />
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500">温度</label>
+            <input id="temperature" type="number" value="0.6" step="0.1" min="0" max="2" class="w-full border rounded p-2" />
+          </div>
+          <div class="flex items-center">
+            <input id="use-llm-judge" type="checkbox" class="w-4 h-4 mr-2" />
+            <label for="use-llm-judge" class="text-sm">启用 GPT 裁判</label>
+          </div>
+          <div class="flex items-center">
+            <input id="use-multi-judge" type="checkbox" class="w-4 h-4 mr-2" />
+            <label for="use-multi-judge" class="text-sm">启用三裁判复核</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 flex items-center gap-3">
+        <button id="solve-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold disabled:opacity-50">
+          生成并评估
+        </button>
+        <span id="status" class="text-sm text-gray-500"></span>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="result-area" class="hidden space-y-6">
+      <!-- Overview -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div id="answer-card" class="bg-white rounded-xl shadow p-4">
+          <h3 class="text-sm font-semibold text-gray-500">最终答案</h3>
+          <p id="final-answer" class="text-xl font-bold mt-1">--</p>
+          <p id="answer-status" class="text-sm mt-2">--</p>
+        </div>
+        <div id="process-card" class="bg-white rounded-xl shadow p-4">
+          <h3 class="text-sm font-semibold text-gray-500">过程评估</h3>
+          <p id="process-status" class="text-xl font-bold mt-1">--</p>
+          <p id="error-type" class="text-sm mt-2">--</p>
+        </div>
+        <div id="meta-card" class="bg-white rounded-xl shadow p-4">
+          <h3 class="text-sm font-semibold text-gray-500">生成信息</h3>
+          <p id="model-info" class="text-sm mt-1">--</p>
+          <p id="token-info" class="text-xs text-gray-400 mt-1">--</p>
+        </div>
+      </div>
+
+      <!-- CBU Alert -->
+      <div id="cbu-alert" class="hidden bg-yellow-50 border border-yellow-300 rounded-xl p-4">
+        <div class="flex items-start gap-3">
+          <span class="text-2xl">⚠️</span>
+          <div>
+            <h3 class="font-bold text-yellow-800">结果正确但过程不成立（Correct But Unjustified）</h3>
+            <p id="cbu-reason" class="text-sm text-yellow-700 mt-1"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dependency Graph -->
+      <div class="bg-white rounded-xl shadow p-5">
+        <h2 class="text-lg font-bold mb-3">依赖图</h2>
+        <div id="dependency-graph" class="border rounded-lg p-3 bg-gray-50 overflow-auto">
+          <p class="text-gray-400 text-sm">暂无依赖图</p>
+        </div>
+      </div>
+
+      <!-- Steps -->
+      <div class="bg-white rounded-xl shadow p-5">
+        <h2 class="text-lg font-bold mb-3">解题步骤</h2>
+        <div id="steps-container" class="space-y-3"></div>
+      </div>
+
+      <!-- Raw output -->
+      <div class="bg-white rounded-xl shadow p-5">
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="text-lg font-bold">原始输出</h2>
+          <button id="toggle-raw" class="text-sm text-blue-600 hover:underline">展开</button>
+        </div>
+        <pre id="raw-output" class="hidden bg-gray-100 rounded-lg p-3 text-sm"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Init ---
+    mermaid.initialize({ startOnLoad: false, theme: 'default' });
+
+    document.getElementById('toggle-advanced').addEventListener('click', () => {
+      const p = document.getElementById('advanced-panel');
+      p.classList.toggle('hidden');
+    });
+    document.getElementById('toggle-raw').addEventListener('click', () => {
+      const r = document.getElementById('raw-output');
+      r.classList.toggle('hidden');
+    });
+
+    // Load problem list
+    async function loadProblems() {
+      try {
+        const res = await fetch('/api/problems');
+        if (!res.ok) return;
+        const data = await res.json();
+        const sel = document.getElementById('problem-select');
+        data.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = p.preview;
+          sel.appendChild(opt);
+        });
+      } catch (e) {
+        console.error('load problems failed', e);
+      }
+    }
+    loadProblems();
+
+    document.getElementById('problem-select').addEventListener('change', async (e) => {
+      const id = e.target.value;
+      if (!id) return;
+      try {
+        const res = await fetch(`/api/problem/${id}`);
+        if (!res.ok) return;
+        const p = await res.json();
+        document.getElementById('problem-input').value = p.problem;
+        document.getElementById('gold-input').value = p.answer || '';
+        if (p.level) document.getElementById('level-select').value = p.level;
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    // --- Helpers ---
+    function setStatus(msg, busy=false) {
+      const el = document.getElementById('status');
+      el.textContent = msg;
+      document.getElementById('solve-btn').disabled = busy;
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function renderSteps(steps, firstErrorStep) {
+      const container = document.getElementById('steps-container');
+      container.innerHTML = '';
+      if (!steps || steps.length === 0) {
+        container.innerHTML = '<p class="text-gray-400">未解析出步骤</p>';
+        return;
+      }
+      steps.forEach(step => {
+        const isError = step.index === firstErrorStep;
+        const cls = isError ? 'error' : 'ok';
+        const badge = isError
+          ? '<span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-semibold">首个错误</span>'
+          : '<span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded font-semibold">通过</span>';
+        const deps = step.depends_on && step.depends_on.length
+          ? `<div class="text-xs text-gray-500 mt-1">依赖步骤: ${step.depends_on.join(', ')}</div>`
+          : '';
+        const div = document.createElement('div');
+        div.className = `step-card ${cls} bg-gray-50 rounded-lg p-4`;
+        div.innerHTML = `
+          <div class="flex justify-between items-start mb-2">
+            <span class="font-bold text-slate-700">步骤 ${step.index}</span>
+            ${badge}
+          </div>
+          <div class="step-text text-slate-800">${escapeHtml(step.text)}</div>
+          ${deps}
+        `;
+        container.appendChild(div);
+      });
+      // KaTeX render
+      if (window.renderMathInElement) {
+        renderMathInElement(container, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    function renderDependencyGraph(graph, steps) {
+      const container = document.getElementById('dependency-graph');
+      container.innerHTML = '';
+      if (!graph || Object.keys(graph).length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-sm">暂无依赖图</p>';
+        return;
+      }
+      // Build mermaid flowchart
+      let def = 'graph TD;\n';
+      steps.forEach(s => {
+        def += `  S${s.index}["步骤 ${s.index}"];\n`;
+      });
+      steps.forEach(s => {
+        (s.depends_on || []).forEach(d => {
+          def += `  S${d} --> S${s.index};\n`;
+        });
+      });
+      const id = 'mermaid-' + Date.now();
+      mermaid.render(id, def).then(result => {
+        container.innerHTML = result.svg;
+      }).catch(err => {
+        container.innerHTML = '<p class="text-red-400 text-sm">依赖图渲染失败: ' + escapeHtml(err.message) + '</p>';
+      });
+    }
+
+    function updateOverview(data) {
+      document.getElementById('result-area').classList.remove('hidden');
+
+      // Final answer
+      const faEl = document.getElementById('final-answer');
+      faEl.textContent = data.final_answer || '（未提取到答案）';
+      const ansStatus = document.getElementById('answer-status');
+      if (data.answer_correct === true) {
+        ansStatus.textContent = '✅ 答案正确' + (data.answer_check_detail ? ' · ' + data.answer_check_detail : '');
+        ansStatus.className = 'text-sm mt-2 text-green-600';
+      } else if (data.answer_correct === false) {
+        ansStatus.textContent = '❌ 答案错误' + (data.answer_check_detail ? ' · ' + data.answer_check_detail : '');
+        ansStatus.className = 'text-sm mt-2 text-red-600';
+      } else {
+        ansStatus.textContent = '⚪ ' + data.answer_check_detail;
+        ansStatus.className = 'text-sm mt-2 text-gray-500';
+      }
+
+      // Process evaluation
+      const ev = data.evaluation || {};
+      const procStatus = document.getElementById('process-status');
+      if (ev.process_correct) {
+        procStatus.textContent = '✅ 过程成立';
+        procStatus.className = 'text-xl font-bold mt-1 text-green-600';
+      } else {
+        procStatus.textContent = '❌ 过程存在问题';
+        procStatus.className = 'text-xl font-bold mt-1 text-red-600';
+      }
+      const errType = document.getElementById('error-type');
+      let et = ev.error_type || '无';
+      if (ev.first_error_step) et += `（首错步骤: ${ev.first_error_step}）`;
+      errType.textContent = et;
+
+      // Meta
+      document.getElementById('model-info').textContent = data.model_name || 'unknown';
+      const tu = data.token_usage || {};
+      document.getElementById('token-info').textContent =
+        `prompt: ${tu.prompt_tokens ?? '-'} / completion: ${tu.completion_tokens ?? '-'} / finish: ${data.finish_reason || '-'}`;
+
+      // CBU alert
+      const cbuAlert = document.getElementById('cbu-alert');
+      const cbu = ev.correct_but_unjustified || {};
+      if (data.answer_correct && !ev.process_correct) {
+        cbuAlert.classList.remove('hidden');
+        document.getElementById('cbu-reason').textContent = cbu.reason || '最终答案正确，但推理过程无法支撑该结论。';
+      } else {
+        cbuAlert.classList.add('hidden');
+      }
+
+      // Raw output
+      document.getElementById('raw-output').textContent = data.raw_output || '';
+
+      // Steps & graph
+      renderSteps(data.steps, ev.first_error_step);
+      renderDependencyGraph(ev.dependency_validation && ev.dependency_validation.graph, data.steps);
+
+      // Scroll to results
+      document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // --- Submit ---
+    document.getElementById('solve-btn').addEventListener('click', async () => {
+      const problem = document.getElementById('problem-input').value.trim();
+      if (!problem) {
+        alert('请输入题目');
+        return;
+      }
+      setStatus('正在生成解题过程，请稍候...', true);
+      try {
+        const payload = {
+          problem: problem,
+          level: document.getElementById('level-select').value,
+          max_tokens: parseInt(document.getElementById('max-tokens').value, 10),
+          temperature: parseFloat(document.getElementById('temperature').value),
+          gold_answer: document.getElementById('gold-input').value.trim() || null,
+          verification_method: 'exact_match',
+          use_llm_judge: document.getElementById('use-llm-judge').checked,
+          use_multi_judge: document.getElementById('use-multi-judge').checked,
+        };
+        const res = await fetch('/api/solve', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || '请求失败');
+        }
+        const data = await res.json();
+        updateOverview(data);
+        setStatus('完成');
+      } catch (err) {
+        console.error(err);
+        setStatus('错误: ' + err.message);
+      } finally {
+        document.getElementById('solve-btn').disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

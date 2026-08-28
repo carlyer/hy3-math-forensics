@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Hy3 数学解题与过程评估 Demo</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+h1 { color: #1a1a1a; }
+.problem { background: #f5f5f5; padding: 16px; border-radius: 8px; margin: 20px 0; }
+.step { background: #fff; border: 1px solid #e0e0e0; padding: 12px; margin: 12px 0; border-radius: 6px; }
+.step pre { white-space: pre-wrap; margin: 0; }
+.status { display: inline-block; padding: 4px 12px; border-radius: 4px; font-weight: bold; }
+.correct { background: #d4edda; color: #155724; }
+.incorrect { background: #f8d7da; color: #721c24; }
+.warning { background: #fff3cd; color: #856404; padding: 12px; border-radius: 6px; margin: 16px 0; }
+</style>
+</head>
+<body>
+<h1>Hy3 数学解题与过程评估 Demo</h1>
+<div class="problem">
+  <h2>题目</h2>
+  <p>小明去书店买笔记本和钢笔。一本笔记本 8 元，一支钢笔 12 元。他买了 5 本笔记本和若干支钢笔，总共花费 88 元。请问他买了多少支钢笔？</p>
+  <p><strong>标准答案：</strong>4</p>
+</div>
+<h2>解题过程</h2>
+<div class='step'><h3>步骤 1</h3><pre>设小明买了 x 支钢笔。
+5 本笔记本花费 5 × 8 = 40 元。
+钢笔花费 88 - 40 = 48 元，即 12x = 48。
+解得 x = 48 / 12 = 4。
+\boxed{4}</pre></div>
+<p><strong>模型最终答案：</strong>4</p>
+<p><strong>答案校验：</strong><span class="status correct">正确</span></p>
+<h2>过程评估</h2>
+<p><strong>过程是否正确：</strong><span class="status correct">是</span></p>
+<p><strong>首个错误步骤：</strong>None</p>
+<p><strong>错误类型：</strong>无错误</p>
+<p><strong>错误详情：</strong>None</p>
+
+</body>
+</html>

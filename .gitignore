@@ -1,0 +1,56 @@
+# 环境与密钥
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# venv
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 大文件与敏感数据
+dataset/math-data.zip
+Hy3数学过程评估工作台_源码包.zip
+results/
+logs/
+*.log
+
+# 临时文件
+.tmp/
+*.tmp
+
+# Node
+node_modules/
+frontend/node_modules/
+frontend/dist/

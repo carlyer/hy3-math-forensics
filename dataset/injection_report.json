@@ -1,0 +1,20 @@
+{
+  "total_mutations": 18,
+  "error_type_distribution": {
+    "计算错误": 5,
+    "条件遗漏": 3,
+    "题意误读": 3,
+    "误用定理/公式": 3,
+    "跳步推导": 2,
+    "循环论证": 2
+  },
+  "answer_correct_distribution": {
+    "correct": 3,
+    "incorrect": 15
+  },
+  "answer_correct_but_process_wrong": 3,
+  "notes": [
+    "answer_correct_but_process_wrong 统计的是最终答案与标准答案一致，但过程被注入错误的样本数。",
+    "answer_correct_distribution.correct 包含无错误样本；本文件中所有样本均含注入错误，因此 correct 全部为答案对过程错。"
+  ]
+}

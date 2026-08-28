@@ -1,0 +1,66 @@
+{
+  "L1-020": [
+    "L1-020-surface_rewrite",
+    "L1-020-add_noise"
+  ],
+  "L1-015": [
+    "L1-015-surface_rewrite",
+    "L1-015-add_noise"
+  ],
+  "L1-011": [
+    "L1-011-surface_rewrite",
+    "L1-011-add_noise"
+  ],
+  "L1-027": [
+    "L1-027-surface_rewrite",
+    "L1-027-add_noise"
+  ],
+  "L2-024": [
+    "L2-024-surface_rewrite",
+    "L2-024-add_noise"
+  ],
+  "L2-026": [
+    "L2-026-surface_rewrite",
+    "L2-026-add_noise"
+  ],
+  "L2-008": [
+    "L2-008-surface_rewrite",
+    "L2-008-add_noise"
+  ],
+  "L2-023": [
+    "L2-023-surface_rewrite",
+    "L2-023-add_noise"
+  ],
+  "L3-012": [
+    "L3-012-surface_rewrite",
+    "L3-012-add_noise"
+  ],
+  "L3-001": [
+    "L3-001-surface_rewrite",
+    "L3-001-add_noise"
+  ],
+  "L3-046": [
+    "L3-046-surface_rewrite",
+    "L3-046-add_noise"
+  ],
+  "L3-044": [
+    "L3-044-surface_rewrite",
+    "L3-044-add_noise"
+  ],
+  "L4-023": [
+    "L4-023-surface_rewrite",
+    "L4-023-add_noise"
+  ],
+  "L4-019": [
+    "L4-019-surface_rewrite",
+    "L4-019-add_noise"
+  ],
+  "L4-011": [
+    "L4-011-surface_rewrite",
+    "L4-011-add_noise"
+  ],
+  "L4-015": [
+    "L4-015-surface_rewrite",
+    "L4-015-add_noise"
+  ]
+}

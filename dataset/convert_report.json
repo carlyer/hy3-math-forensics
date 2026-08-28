@@ -1,0 +1,78 @@
+{
+  "total_kept": 146,
+  "total_dropped": 1,
+  "by_level": {
+    "L1": 30,
+    "L2": 35,
+    "L3": 47,
+    "L4": 34
+  },
+  "by_answer_type": {
+    "integer": 108,
+    "expression": 11,
+    "float": 1,
+    "rational": 9,
+    "choice": 14,
+    "list": 3
+  },
+  "by_source": {
+    "L1_Basic/raw/gsm8k_sample.jsonl": {
+      "total": 18,
+      "kept": 18,
+      "dropped": 0
+    },
+    "L1_Basic/raw/math23k_sample.jsonl": {
+      "total": 12,
+      "kept": 12,
+      "dropped": 0
+    },
+    "L2_Medium/raw/agieval_sample.jsonl": {
+      "total": 15,
+      "kept": 15,
+      "dropped": 0
+    },
+    "L2_Medium/raw/math_level2_3.jsonl": {
+      "total": 20,
+      "kept": 20,
+      "dropped": 0
+    },
+    "L3_Hard/raw/amc12_hard_problems_hy3_test.jsonl": {
+      "total": 10,
+      "kept": 10,
+      "dropped": 0
+    },
+    "L3_Hard/raw/math_level4_5.jsonl": {
+      "total": 12,
+      "kept": 12,
+      "dropped": 0
+    },
+    "L3_Hard/raw/olympiadbench_sample.jsonl": {
+      "total": 15,
+      "kept": 15,
+      "dropped": 0
+    },
+    "L3_Hard/raw/omnimath_l3_sample.jsonl": {
+      "total": 10,
+      "kept": 10,
+      "dropped": 0
+    },
+    "L4_Expert/raw/AIME1.jsonl": {
+      "total": 25,
+      "kept": 25,
+      "dropped": 0
+    },
+    "L4_Expert/raw/aime_amc_sample.jsonl": {
+      "total": 10,
+      "kept": 9,
+      "dropped": 1
+    }
+  },
+  "dropped_samples": [
+    {
+      "file": "L4_Expert/raw/aime_amc_sample.jsonl",
+      "id": "2010_AMC_10B_Problems/Problem_25",
+      "reason": "已知 problem 不完整"
+    }
+  ],
+  "duplicate_samples": []
+}

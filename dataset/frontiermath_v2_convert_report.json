@@ -1,0 +1,73 @@
+{
+  "total": 12,
+  "has_gold_answer": 3,
+  "no_gold_answer": 9,
+  "by_tier": {
+    "Tier 4 (Research)": 4,
+    "Tier 3 (Graduate/Research)": 3,
+    "Tier 2 (Graduate)": 3,
+    "Tier 1 (HS/Undergrad)": 2
+  },
+  "records": [
+    {
+      "id": "FM-v2-001",
+      "has_gold_answer": true,
+      "answer": "367707"
+    },
+    {
+      "id": "FM-v2-002",
+      "has_gold_answer": true,
+      "answer": "1876572071974094803391179"
+    },
+    {
+      "id": "FM-v2-003",
+      "has_gold_answer": true,
+      "answer": "9811"
+    },
+    {
+      "id": "FM-v2-004",
+      "has_gold_answer": false,
+      "answer": null
+    },
+    {
+      "id": "FM-v2-005",
+      "has_gold_answer": false,
+      "answer": null
+    },
+    {
+      "id": "FM-v2-006",
+      "has_gold_answer": false,
+      "answer": null
+    },
+    {
+      "id": "FM-v2-007",
+      "has_gold_answer": false,
+      "answer": null
+    },
+    {
+      "id": "FM-v2-008",
+      "has_gold_answer": false,
+      "answer": null
+    },
+    {
+      "id": "FM-v2-009",
+      "has_gold_answer": false,
+      "answer": null
+    },
+    {
+      "id": "FM-v2-010",
+      "has_gold_answer": false,
+      "answer": null
+    },
+    {
+      "id": "FM-v2-011",
+      "has_gold_answer": false,
+      "answer": null
+    },
+    {
+      "id": "FM-v2-012",
+      "has_gold_answer": false,
+      "answer": null
+    }
+  ]
+}

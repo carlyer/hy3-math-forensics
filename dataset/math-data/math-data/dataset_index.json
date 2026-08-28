@@ -1,0 +1,54 @@
+[
+  {
+    "file": "L1_Basic/raw/gsm8k_sample.jsonl",
+    "records": 18
+  },
+  {
+    "file": "L1_Basic/raw/math23k_sample.jsonl",
+    "records": 12
+  },
+  {
+    "file": "L2_Medium/raw/agieval_sample.jsonl",
+    "records": 15
+  },
+  {
+    "file": "L2_Medium/raw/math_level2_3.jsonl",
+    "records": 20
+  },
+  {
+    "file": "L3_Hard/raw/amc12_hard_problems_hy3_test.jsonl",
+    "records": 10
+  },
+  {
+    "file": "L3_Hard/raw/hothan_olympiadbench_sample.jsonl",
+    "records": 15
+  },
+  {
+    "file": "L3_Hard/raw/math_level4_5.jsonl",
+    "records": 12
+  },
+  {
+    "file": "L3_Hard/raw/olympiadbench_sample.jsonl",
+    "records": 15
+  },
+  {
+    "file": "L3_Hard/raw/omnimath_l3_sample.jsonl",
+    "records": 10
+  },
+  {
+    "file": "L4_Expert/raw/AIME1.jsonl",
+    "records": 25
+  },
+  {
+    "file": "L4_Expert/raw/aime_1983_2024_sample.jsonl",
+    "records": 15
+  },
+  {
+    "file": "L4_Expert/raw/aime_amc_sample.jsonl",
+    "records": 10
+  },
+  {
+    "file": "L4_Expert/raw/imo_sample.jsonl",
+    "records": 5
+  }
+]
