@@ -26,6 +26,16 @@ jobs:
       - name: 安装依赖
         run: pip install huggingface_hub
 
+      - name: 将 HF 数据集仓库设为公开
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          python -c "
+          from huggingface_hub import HfApi
+          HfApi().update_repo_settings('yerr2/hy3-math-forensics-dataset', repo_type='dataset', private=False)
+          print('HF 数据集仓库已设为公开')
+          "
+
       - name: 从 Hugging Face 下载数据集
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
