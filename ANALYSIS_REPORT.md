@@ -84,6 +84,8 @@
 | L7 | 多采样一致性 | temperature>0 采样 N 次，比较答案与路径 | 记忆/背诵（答案稳、路径飘），单次评测不可见 |
 | L8 | 反向验证（Math-Shepherd 推理时版） | 步骤前缀续写采样，到达正确答案的经验概率为步骤分 | 不依赖裁判主观的步骤级定位；与 judge 互补（见 3.8） |
 
+> L3 层两套 judge prompt（普通 / Research，含 few-shot 判例）与解题 prompt、反向验证续写 prompt 的完整全文，见 PROJECT_REPORT.md 附录 A；README「过程评估方法」一节亦收录了 judge prompt 全文。
+
 两点架构决策值得强调：
 
 1. **优先级覆盖关系**：L4 截断检测、L5 依赖图判定的优先级高于 L3 LLM judge——前者是硬信号，不允许被语义裁判「说服」覆盖（截断即判 `process_correct=false`）。
