@@ -4,7 +4,7 @@
 用法：
     # 先登录：hf auth login（或设置环境变量 HF_TOKEN）
     python scripts/upload_dataset_to_hf.py \
-        --repo Carlyer/hy3-math-forensics-dataset \
+        --repo yerr2/hy3-math-forensics-dataset \
         --src /path/to/hy3-dataset-staging \
         --private
 
@@ -20,7 +20,7 @@ from huggingface_hub import HfApi
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repo", default="Carlyer/hy3-math-forensics-dataset",
+    parser.add_argument("--repo", default="yerr2/hy3-math-forensics-dataset",
                         help="HF Dataset 仓库名（namespace/name）")
     parser.add_argument("--src", required=True,
                         help="本地暂存目录（内含 dataset/ 相对路径结构）")

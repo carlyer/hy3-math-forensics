@@ -3,7 +3,7 @@
 
 用法：
     python scripts/download_dataset_from_hf.py \
-        --repo Carlyer/hy3-math-forensics-dataset --dest .
+        --repo yerr2/hy3-math-forensics-dataset --dest .
 
 私有仓库需设置环境变量 HF_TOKEN。
 """
@@ -14,7 +14,7 @@ from huggingface_hub import snapshot_download
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repo", default="Carlyer/hy3-math-forensics-dataset",
+    parser.add_argument("--repo", default="yerr2/hy3-math-forensics-dataset",
                         help="HF Dataset 仓库名（namespace/name）")
     parser.add_argument("--dest", default=".", help="下载目标目录（通常为仓库根目录）")
     args = parser.parse_args()

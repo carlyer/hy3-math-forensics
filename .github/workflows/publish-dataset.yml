@@ -1,6 +1,6 @@
 name: 定时发布题目数据集（2026-09-11）
 
-# 题目数据集托管于 Hugging Face（Carlyer/hy3-math-forensics-dataset），
+# 题目数据集托管于 Hugging Face（yerr2/hy3-math-forensics-dataset），
 # 在 2026-09-11 前不进入本仓库；到时间后由本 workflow 自动拉回并提交。
 # cron 为 UTC 时间：0 0 11 9 * = 9 月 11 日 00:00 UTC（北京时间 08:00）。
 # 如需提前/补跑，可在 Actions 页面手动触发（workflow_dispatch）。
