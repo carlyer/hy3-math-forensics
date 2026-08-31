@@ -39,11 +39,11 @@
 ## 🗂 目录结构
 
 <details>
-<summary>📂 点击展开：完整目录结构</summary>
+<summary>完整目录结构</summary>
 
 
 <details>
-<summary><b>点击展开完整目录树</b></summary>
+<summary><b>完整目录树</b></summary>
 
 ```text
 hy3-math-eval/
@@ -160,7 +160,7 @@ hy3-math-eval/
 ## ⚙️ 环境配置
 
 <details>
-<summary>📂 点击展开：环境安装与 API 配置</summary>
+<summary>环境安装与 API 配置</summary>
 
 
 ### 1️⃣ 基础环境
@@ -278,7 +278,7 @@ python evaluator/evaluate.py \
 ## 🚀 快速开始
 
 <details>
-<summary>📂 点击展开：从构建题库到可视化的完整流程</summary>
+<summary>从构建题库到可视化的完整流程</summary>
 
 
 > 💡 快速开始默认使用 **158 题快速复现子集**（十几分钟跑通全链路）；正式结论对应的是 418 题主实验集（`dataset/problems_merged_full.jsonl`），二者关系见 📚 数据集章。题目数据文件托管于 Hugging Face，需先执行第 ⓪ 步下载。
@@ -429,7 +429,7 @@ python demo/demo.py --problem "解方程 2x + 5 = 13。"
 
 
 <details>
-<summary>📂 点击展开：难度分层 / 多维分组 / 扰动对照 / 错误分布 / 一致性探测等详细结果</summary>
+<summary>难度分层 / 多维分组 / 扰动对照 / 错误分布 / 一致性探测等详细结果</summary>
 
 ### 📶 难度分层结果
 
@@ -558,7 +558,7 @@ L2 出现典型的"答案稳定但路径漂移"现象：答案一致率 100%，�
 ## 🔬 过程评估方法
 
 <details>
-<summary>📂 点击展开：八层评估架构与错误类型体系</summary>
+<summary>八层评估架构与错误类型体系</summary>
 
 
 评估采用**五层混合架构**：
@@ -613,7 +613,7 @@ L2 出现典型的"答案稳定但路径漂移"现象：答案一致率 100%，�
 ## ✅ 评估器有效性验证（修复后）
 
 <details>
-<summary>📂 点击展开：定位准确率 / 误报率 / CBU 检出 / 裁判一致性</summary>
+<summary>定位准确率 / 误报率 / CBU 检出 / 裁判一致性</summary>
 
 
 | 指标 | 数值 | 说明 |
@@ -647,7 +647,7 @@ FrontierMath v2 人工抽检记录见 `validation/frontiermath_spot_check.md`。
 ## 📚 数据集
 
 <details>
-<summary>📂 点击展开：418 题构成、题源链接与污染标注</summary>
+<summary>418 题构成、题源链接与污染标注</summary>
 
 
 > 📌 **统一口径**：本项目所有正式结论均基于 **418 题主实验集**（`dataset/problems_merged_full.jsonl`）。158 题合并集只是它的一个子集，仅用于快速复现与流程冒烟——README 和报告中标注"158 题子集"的数字均为中间结果，正式结论一律以 418 题为准。
@@ -727,7 +727,7 @@ FrontierMath v2 人工抽检记录见 `validation/frontiermath_spot_check.md`。
 ## ⚠️ 注意事项
 
 <details>
-<summary>📂 点击展开：五条注意事项</summary>
+<summary>五条注意事项</summary>
 
 
 1. **API 模式优先**：已部署 vLLM 服务时，请通过 `.env` 配置 `HY3_API_BASE`，避免本地重复加载模型导致 GPU 内存不足。
@@ -744,7 +744,7 @@ FrontierMath v2 人工抽检记录见 `validation/frontiermath_spot_check.md`。
 ## 🔁 实验进展与迭代记录
 
 <details>
-<summary>📂 点击展开：9 次迭代主线与关键失败事件</summary>
+<summary>9 次迭代主线与关键失败事件</summary>
 
 
 > 主线共 **9 次迭代**。这里只记每轮改动的关键结果；完整的"尝试 → 失败 → 改进"细节（含中间态数据）见 [`PROJECT_LESSONS.md`](PROJECT_LESSONS.md) 第 10 节。
