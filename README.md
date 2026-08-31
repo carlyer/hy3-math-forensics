@@ -39,6 +39,10 @@
 ## 🗂 目录结构
 
 <details>
+<summary>📂 点击展开：完整目录结构</summary>
+
+
+<details>
 <summary><b>点击展开完整目录树</b></summary>
 
 ```text
@@ -156,9 +160,16 @@ hy3-math-eval/
 
 </details>
 
+
+</details>
+
 ---
 
 ## ⚙️ 环境配置
+
+<details>
+<summary>📂 点击展开：环境安装与 API 配置</summary>
+
 
 ### 1️⃣ 基础环境
 
@@ -267,9 +278,16 @@ python evaluator/evaluate.py \
 
 多 judge 采用多数投票聚合：只有明确多数裁判认为过程正确时才判为正确；错误步骤取中位数，错误类型取众数。
 
+
+</details>
+
 ---
 
 ## 🚀 快速开始
+
+<details>
+<summary>📂 点击展开：从构建题库到可视化的完整流程</summary>
+
 
 > 💡 快速开始默认使用 **158 题快速复现子集**（十几分钟跑通全链路）；正式结论对应的是 418 题主实验集（`dataset/problems_merged_full.jsonl`，已随仓库提供，无需重新构建），二者关系见 📚 数据集章。
 
@@ -382,6 +400,9 @@ npm run dev
 python demo/demo.py --problem "解方程 2x + 5 = 13。"
 ```
 
+
+</details>
+
 ---
 
 ## 📊 最终评测结果（完整主实验集 418 题）
@@ -404,6 +425,10 @@ python demo/demo.py --problem "解方程 2x + 5 = 13。"
 |---|---|
 | 可自动判分题 | 394 |
 | 答案错误但过程被判正确率 | **84 / 394 = 21.32%** |
+
+
+<details>
+<summary>📂 点击展开：难度分层 / 多维分组 / 扰动对照 / 错误分布 / 一致性探测等详细结果</summary>
 
 ### 📶 难度分层结果
 
@@ -524,9 +549,16 @@ L2 出现典型的"答案稳定但路径漂移"现象：答案一致率 100%，�
 
 > 📌 结论：L2 层答案准确率虽高，但超过一半题目存在中间表征不稳定，与 MATH/AGIEval 高污染风险下"记忆/模板调用"的假说高度吻合。详细案例分析见 `results/l2_case_analysis.md`，指标报告见 `results/l2_memory_metrics_report.md`。
 
+
+</details>
+
 ---
 
 ## 🔬 过程评估方法
+
+<details>
+<summary>📂 点击展开：八层评估架构与错误类型体系</summary>
+
 
 评估采用**五层混合架构**：
 
@@ -572,9 +604,16 @@ L2 出现典型的"答案稳定但路径漂移"现象：答案一致率 100%，�
 
 当 `answer_correct == true` 但 `process_correct == false` 时，系统会标记为 `correct_but_unjustified`，并记录首个错误步骤，用于识别猜答案、数值巧合、定理误用却得到正确结果等情况。
 
+
+</details>
+
 ---
 
 ## ✅ 评估器有效性验证（修复后）
+
+<details>
+<summary>📂 点击展开：定位准确率 / 误报率 / CBU 检出 / 裁判一致性</summary>
+
 
 | 指标 | 数值 | 说明 |
 |---|:---:|---|
@@ -599,9 +638,16 @@ L2 出现典型的"答案稳定但路径漂移"现象：答案一致率 100%，�
 
 FrontierMath v2 人工抽检记录见 `validation/frontiermath_spot_check.md`。
 
+
+</details>
+
 ---
 
 ## 📚 数据集
+
+<details>
+<summary>📂 点击展开：418 题构成、题源链接与污染标注</summary>
+
 
 > 📌 **统一口径**：本项目所有正式结论均基于 **418 题主实验集**（`dataset/problems_merged_full.jsonl`）。158 题合并集只是它的一个子集，仅用于快速复现与流程冒烟——README 和报告中标注"158 题子集"的数字均为中间结果，正式结论一律以 418 题为准。
 
@@ -670,9 +716,16 @@ FrontierMath v2 人工抽检记录见 `validation/frontiermath_spot_check.md`。
 
 > ☣️ 污染风险三级定义：🔴 **high** = 常见预训练/微调数据集（GSM8K、MATH、AGIEval 等）；🟡 **medium** = 竞赛/考试题源（AMC/AIME、OlympiadBench、Omni-MATH 等）；🟢 **low** = 研究级新题、最新考试题、扰动变体与自构造题。
 
+
+</details>
+
 ---
 
 ## ⚠️ 注意事项
+
+<details>
+<summary>📂 点击展开：五条注意事项</summary>
+
 
 1. **API 模式优先**：已部署 vLLM 服务时，请通过 `.env` 配置 `HY3_API_BASE`，避免本地重复加载模型导致 GPU 内存不足。
 2. **本地模型加载**：若未配置 API，默认从 `bifrost` 目录加载本地模型；请确认该路径模型已就绪且 GPU 显存充足。
@@ -680,9 +733,16 @@ FrontierMath v2 人工抽检记录见 `validation/frontiermath_spot_check.md`。
 4. **符号验证局限**：当前符号验证基于启发式提取等式，复杂 LaTeX 或自然语言表述可能无法完全覆盖，需配合 LLM judge 使用。
 5. **`.env` 文件**：包含本地服务地址，请勿提交到公开仓库（已通过 `.gitignore` 忽略）。
 
+
+</details>
+
 ---
 
 ## 🔁 实验进展与迭代记录
+
+<details>
+<summary>📂 点击展开：9 次迭代主线与关键失败事件</summary>
+
 
 > 主线共 **9 次迭代**。这里只记每轮改动的关键结果；完整的"尝试 → 失败 → 改进"细节（含中间态数据）见 [`PROJECT_LESSONS.md`](PROJECT_LESSONS.md) 第 10 节。
 
@@ -751,6 +811,9 @@ FrontierMath v2 人工抽检记录见 `validation/frontiermath_spot_check.md`。
 | 答案错误但过程被判正确 | 3.36%（5/149） | 2.68%（4/149） |
 
 使用外部 GPT 裁判时，单 judge 比三 judge 投票更严格：过程正确率更低、CBU 率更高。这说明 Hy3 自审在多 judge 中拉低了整体严格度，若要真实刻画过程严谨性，优先使用外部强模型单裁判。裁判间一致性分析见 `results/judge_agreement_stats.json`：三 judge 对过程是否正确的完全同意率为 48.1%，两两 Cohen's κ 在 0.24 ~ 0.85 之间，说明不同裁判对"过程是否成立"的判定存在显著差异。
+
+
+</details>
 
 ---
 
