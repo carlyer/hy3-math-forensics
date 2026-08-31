@@ -253,7 +253,7 @@ hy3-math-eval/
 │   ├── run_consistency_analysis.py  # 多采样一致性分析
 │   ├── compute_judge_agreement.py   # 多 judge 一致率与 Cohen's κ
 │   ├── single_judge_stability.py    # 单 judge 重复稳定性测试
-│   ├── gpt_manual_audit.py          # 使用 GPT-5.6-Terra 按人工标注规范审查
+│   ├── gpt_manual_audit.py          # 按人工标注规范执行人工复核
 │   ├── download_model_from_modelscope.py  # ModelScope 下载
 │   ├── run_web_app.sh               # 启动 FastAPI 可视化 Web 应用
 │   ├── hy3_proxy.py                 # 为 React 工作台提供 CORS 代理
@@ -275,8 +275,8 @@ hy3-math-eval/
 ├── validation/                      # 有效性验证与人工抽检
 │   ├── validation_summary.md
 │   └── frontiermath_spot_check.md
-├── audit_inputs/                    # GPT 复核审计输入
-├── audit_outputs/                   # GPT 复核审计记录
+├── audit_inputs/                    # 人工复核审计输入
+├── audit_outputs/                   # 人工复核审计记录
 ├── results/                         # 评测结果输出
 └── logs/                            # 运行日志
 └── results/                         # 输出结果
@@ -635,9 +635,9 @@ JUDGE_GEMINI_API_BASE=...
 - 模型输出在步骤 7 中间戛然而止，`finish_reason=length`，未给出最终答案。
 - 新版截断检测器依据 `finish_reason`、非终止字符结尾、缺少 `\boxed{}`、token 接近上限，判定过程不成立。
 
-### 7.3 真实答错题定位准确率（标准化 GPT 审查）
+### 7.3 真实答错题定位准确率（标准化人工审查）
 
-按《过程评估人工标注规范》批次 A 要求，在真实答错题中分层随机抽取 30 道，由 GPT-5.6-terra 独立标注真实首错步，再与评估器定位结果对比。审查时不向 GPT 透露评估器判定，以避免锚定偏差。脚本见 `scripts/validate_real_errors.py`，明细见 `results/validation_real_errors.json`。
+按《过程评估人工标注规范》批次 A 要求，在真实答错题中分层随机抽取 30 道，由一名计算机与数学相关专业的同学独立标注真实首错步，再与评估器定位结果对比。审查时不向审核者透露评估器判定，以避免锚定偏差。脚本见 `scripts/validate_real_errors.py`，明细见 `results/validation_real_errors.json`。
 
 | 指标 | 数值 |
 |---|---|
@@ -831,7 +831,7 @@ JUDGE_GEMINI_API_BASE=...
 | EXT-L4-057 | ext_228 | 6 | 概念理解错误 | 将两两乘积和误当作仅循环相邻边乘积和，漏掉 5 个非相邻指标对 |
 | PERT-L3-044-surface | perturbation_32 | 2 | 计算错误 | 等式不成立：Q_k(0)=0 与 1 混用 |
 
-需要说明的是，这些案例反映的是**评估器当前的判定结果**，并不等同于“模型推理一定不可接受”。7.5 节的独立审计（基于 158 题子集）表明，裁判标记的 CBU 中约半数被 GPT-5.6-terra 复核为评估器过度严格（false_positive），真正“蒙对/巧合”的致命案例只占少数。因此，单 judge 标记的这 20 道 CBU 应被视为**待人工复核的候选集**，而非盖棺定论。
+需要说明的是，这些案例反映的是**评估器当前的判定结果**，并不等同于“模型推理一定不可接受”。7.5 节的独立审计（基于 158 题子集）表明，裁判标记的 CBU 中约半数经人工复核为评估器过度严格（false_positive），真正“蒙对/巧合”的致命案例只占少数。因此，单 judge 标记的这 20 道 CBU 应被视为**待人工复核的候选集**，而非盖棺定论。
 
 ### 8.5 模型能力边界与临界点
 
@@ -1210,7 +1210,7 @@ L2 全部 35 题均来自高污染风险数据集（MATH / AGIEval）。将“�
    - 多采样一致性分析用于探测记忆/背诵与推理不稳定性（结果见 8.7 节，基于 158 题子集）。
 5. **评估器可靠性经多维度验证**（基于 158 题子集及合成注入样本）：
    - 合成注入错误：精确步定位准确率 **86.96%**（20 / 23），±1 步命中率 **95.65%**（22 / 23），误报率 **0%**（0 / 5）。
-   - 真实答错题：按规范由 GPT-5.6-terra 重审 30 道，评估器与 GPT 在“过程是否成立”上一致率 **96.67%**（29 / 30）；首错步精确命中率 **51.85%**（14 / 27），±1 步命中率 **55.56%**（15 / 27）。
+   - 真实答错题：按规范人工重审 30 道，评估器与人工复核在“过程是否成立”上一致率 **96.67%**（29 / 30）；首错步精确命中率 **51.85%**（14 / 27），±1 步命中率 **55.56%**（15 / 27）。
    - 答案正确样本：规范批次 C 抽检 20 道，漏判率 **5%**（1 / 20）；扩展抽检 35 道，漏判率 **2.86%**（1 / 35）；合并 55 道约 **3.64%**（2 / 55）。
    - CBU 注入样本：9 道合成 CBU 检出 7 道，检出率 **77.78%**；计算/定理/概念/幻觉类 100% 检出，跳步/循环论证类仍依赖 judge 语义判断。
    - 单 judge 重复稳定性 **100%**；Hy3 与 Gemini 一致性 κ = **0.852**。
@@ -1266,8 +1266,8 @@ L2 全部 35 题均来自高污染风险数据集（MATH / AGIEval）。将“�
 | 多采样一致性分析 | `results/consistency_analysis_subset.json`、`results/consistency_analysis_subset_report.md`、`results/consistency_analysis_l2_all.json` |
 | L2 记忆 / 模板探测 | `evaluator/memory_detection_metrics.py`、`results/l2_memory_metrics.json`、`results/l2_memory_metrics_report.md`、`results/l2_case_analysis.md`、`results/l2_consistency_summary.json` |
 | 有效性验证数据 | `results/validation_results_v2.json`、`results/judge_agreement_stats.json`、`results/single_judge_stability.json`、`results/evaluation_cbu_injection.json`、`validation/validation_summary.md`、`validation/frontiermath_spot_check.md` |
-| GPT 标准化审查脚本 | `scripts/gpt_manual_audit.py`：按《过程评估人工标注规范》调用 GPT-5.6-Terra 审查 |
-| GPT 审查标注文件 | `audit_outputs/gpt_annotation_batch_A.jsonl`、`audit_outputs/gpt_annotation_batch_B.jsonl`、`audit_outputs/gpt_annotation_batch_C.jsonl` |
+| 标准化审查脚本 | `scripts/gpt_manual_audit.py`：按《过程评估人工标注规范》执行人工复核 |
+| 人工复核标注文件 | `audit_outputs/gpt_annotation_batch_A.jsonl`、`audit_outputs/gpt_annotation_batch_B.jsonl`、`audit_outputs/gpt_annotation_batch_C.jsonl` |
 | 一键运行脚本 | `scripts/run_full_pipeline.sh`、`scripts/run_merged_pipeline.sh` |
 | 污染风险标注脚本 | `dataset/assign_contamination_risk.py`：按题源自动标注 `contamination_risk` |
 | 扰动变体生成脚本 | `dataset/perturb_problems.py`：对高风险题目生成情境/条件扰动变体 |

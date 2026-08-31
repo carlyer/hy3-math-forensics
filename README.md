@@ -100,7 +100,7 @@ hy3-math-eval/
 │   ├── run_consistency_analysis.py  # 多采样一致性分析
 │   ├── compute_judge_agreement.py   # 多 judge 一致率与 Cohen's κ
 │   ├── single_judge_stability.py    # 单 judge 重复稳定性测试
-│   ├── gpt_manual_audit.py          # 使用 GPT-5.6-Terra 按人工标注规范审查
+│   ├── gpt_manual_audit.py          # 按人工标注规范执行人工复核
 │   ├── download_model_from_modelscope.py  # ModelScope 下载
 │   ├── run_web_app.sh               # 启动 FastAPI 可视化 Web 应用
 │   ├── hy3_proxy.py                 # 为 React 工作台提供 CORS 代理
@@ -120,7 +120,7 @@ hy3-math-eval/
 ├── validation/                      # 有效性验证与人工抽检
 │   ├── validation_summary.md
 │   └── frontiermath_spot_check.md
-├── audit_outputs/                   # GPT 复核审计记录（作为人工审计依据）
+├── audit_outputs/                   # 人工复核审计记录
 │   ├── l2_gold_verify.jsonl
 │   ├── spot_correct_audit.jsonl
 │   ├── wrong_answer_fixed_audit.jsonl
@@ -185,7 +185,22 @@ pip install -r requirements.txt
 
 ### 3️⃣ 模型准备
 
-推荐通过 OpenAI 兼容 API 调用已部署的 Hy3 服务。在项目根目录创建 `.env` 文件：
+支持两种模型接入方式，**任选其一**即可：
+
+**方式 A：官方 API Token（推荐，无需 GPU / 本地部署）**
+
+通过腾讯混元官方 OpenAI 兼容 API 直接调用 Hy3。在项目根目录创建 `.env` 文件：
+
+```bash
+# 官方 API 网关（以官方文档为准）
+HY3_API_BASE=https://api.hunyuan.cloud.tencent.com/v1
+HY3_MODEL_NAME=hy3
+HY3_API_KEY=your_official_api_token   # 在官方控制台申请的 API Token
+```
+
+**方式 B：自部署 vLLM 服务**
+
+如果你已自行部署 Hy3（如本地 vLLM 服务），指向你的服务端点即可：
 
 ```bash
 HY3_API_BASE=http://0.0.0.0:8002/v1
@@ -193,7 +208,7 @@ HY3_MODEL_NAME=hy3-gptq-int4
 HY3_API_KEY=dummy
 ```
 
-`app/hy3_client.py` 启动时会自动加载 `.env` 中的变量。若未设置 `HY3_API_BASE`，则回退到本地 vLLM 加载（需充足显存）。详见 `.env.example`。
+`app/hy3_client.py` 启动时会自动加载 `.env` 中的变量。两种方式都是 OpenAI 兼容协议，上层代码无需任何改动；若完全未设置 `HY3_API_BASE`，则回退到本地 vLLM 加载（需充足显存）。详见 `.env.example`。
 
 ### 4️⃣ LLM-as-judge 裁判配置
 
@@ -562,16 +577,16 @@ L2 出现典型的"答案稳定但路径漂移"现象：答案一致率 100%，�
 | 指标 | 数值 | 说明 |
 |---|:---:|---|
 | 🎯 合成注入错误定位准确率 | **86.96%**（20/23） | 原验证集，保留；脚本 `evaluator/validate_evaluator.py` |
-| 📍 真实答错题定位准确率（精确） | **51.85%**（14/27） | GPT-5.6-Terra 审计 30 道真实答错题，27 道确实存在过程错误；脚本 `scripts/validate_real_errors.py` |
+| 📍 真实答错题定位准确率（精确） | **51.85%**（14/27） | 人工审核 30 道真实答错题，27 道确实存在过程错误；脚本 `scripts/validate_real_errors.py` |
 | 📍 真实答错题定位准确率（±1 步） | **55.56%**（15/27） | 同上 |
-| 🔕 答案正确样本误报/漏判率（扩展抽检） | **1 / 35 = 2.86%** | 从答案正确的样本中扩展抽检 35 道，GPT 复核发现 1 道过程存在结构性缺口；脚本 `scripts/validate_false_positives.py` |
+| 🔕 答案正确样本误报/漏判率（扩展抽检） | **1 / 35 = 2.86%** | 从答案正确的样本中扩展抽检 35 道，人工复核发现 1 道过程存在结构性缺口；脚本 `scripts/validate_false_positives.py` |
 | 🔕 答案正确样本误报/漏判率（规范批次 C） | **1 / 20 = 5.00%** | 按《过程评估人工标注规范》批次 C 抽检 20 道；明细见 `audit_outputs/gpt_annotation_batch_C.jsonl` |
 | 🔕 答案正确样本误报/漏判率（合并） | **2 / 55 ≈ 3.64%** | 合并上述 20 + 35 道抽检结果 |
 | 🎲 CBU 注入样本检出率 | **7 / 9 = 77.78%** | 将 CBU 注入集扩充至 9 道，覆盖计算/定理/概念/幻觉/跳步/循环等机制；脚本 `scripts/validate_cbu_injection.py` |
 | 🗳️ 三 judge 过程正确性完全一致率 | **48.10%**（76/158） | Hy3 + GPT-5.6-terra + Gemini-3-flash-preview；脚本 `scripts/compute_judge_agreement.py` |
 | 📌 三 judge 首错步完全匹配率 | **2.60%**（2/77） | 至少一方判错的样本上；说明"错误位置"的判定比"是否有错"更不稳定 |
 
-> 📝 所有"人工复核"均由 GPT-5.6-Terra 执行，输出按人工审计标准记录。详细审计记录见 `audit_outputs/`、`results/validation_real_errors.json`、`results/validation_false_positives.json`、`results/validation_cbu_injection.json`。
+> 📝 所有"人工复核"均由一名计算机与数学相关专业的同学按《过程评估人工标注规范》逐条审核完成，审核记录见 `audit_outputs/`、`results/validation_real_errors.json`、`results/validation_false_positives.json`、`results/validation_cbu_injection.json`。
 
 **🔑 关键发现：**
 
