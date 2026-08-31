@@ -54,3 +54,11 @@ logs/
 node_modules/
 frontend/node_modules/
 frontend/dist/
+
+# ===== 题目数据集（托管于 Hugging Face，2026-09-11 起由 workflow 自动回传 GitHub）=====
+dataset/**/*.jsonl
+dataset/**/*.parquet
+dataset/**/*.zip
+dataset/**/test.lean
+dataset/**/AIME1_source.txt
+dataset/frontiermath_v2_sample_12_problems.json
