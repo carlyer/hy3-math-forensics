@@ -427,6 +427,20 @@ python demo/demo.py --problem "解方程 2x + 5 = 13。"
 | 可自动判分题 | 394 |
 | 答案错误但过程被判正确率 | **84 / 394 = 21.32%** |
 
+### 📈 可视化总览
+
+![按难度分层的核心指标](assets/figures/level_metrics.png)
+
+> 图 1：答案/过程/严格过程正确率与 CBU 率随难度（L1–L4）的变化（单裁判 GPT-5.6-terra）。
+
+![单裁判 vs 三裁判投票](assets/figures/single_vs_multi_judge.png)
+
+> 图 2：单裁判与三裁判投票的核心指标对比——L4 层过程正确率近乎腰斩，三裁判显著更严格。
+
+![错误类型分布](assets/figures/error_types.png)
+
+> 图 3：65 道错误样本的类型分布，跳步推导（20）与计算错误（14）占比最高。
+
 
 <details>
 <summary>难度分层 / 多维分组 / 扰动对照 / 错误分布 / 一致性探测等详细结果</summary>
@@ -482,6 +496,10 @@ python demo/demo.py --problem "解方程 2x + 5 = 13。"
 | 🟡 medium | 121 | 109 | 47.71% | 80.73% |
 | 🟢 low | 115 | 103 | 65.05% | 81.55% |
 
+![污染风险分组对比](assets/figures/contamination_gap.png)
+
+> 图：high/medium/low 三组的答案与过程正确率对比——high 组答案正确率虚高，疑似记忆红利。
+
 - high 风险组（GSM8K/MATH 等常见数据集）答案正确率显著高于 medium 组，但 medium 组过程正确率仍保持 80%+，说明过程评估在区分记忆与推理上有效。
 
 ### 🌀 扰动变体对照实验
@@ -503,6 +521,10 @@ python demo/demo.py --problem "解方程 2x + 5 = 13。"
 | 原题 | 56.25% | 87.50% |
 | surface_rewrite | 56.25% | 81.25% |
 | add_noise | 50.00% | 87.50% |
+
+![扰动变体对照实验](assets/figures/perturbation.png)
+
+> 图：GSM-Plus 20 簇与 16 原题扰动簇的答案/过程正确率对照——仅换数字即让 GSM8K 原题从 100% 跌至 80%。
 
 ### ❌ 错误类型分布
 
@@ -527,6 +549,10 @@ python demo/demo.py --problem "解方程 2x + 5 = 13。"
 | 答案一致率 | 75.00% | 100.00% | 100.00% | 60.00% | 40.00% |
 | 过程一致率 | 25.00% | 80.00% | 20.00% | 0.00% | 0.00% |
 | 答案一致但过程不一致率 | 50.00% | 20.00% | 80.00% | 60.00% | 40.00% |
+
+![多采样一致性按难度分层](assets/figures/consistency_by_level.png)
+
+> 图：20 题 × 3 样本的一致性指标按难度分层——L2 答案一致率 100% 但过程一致率仅 20%，呈典型"答案稳、路径飘"记忆指纹。
 
 L2 出现典型的"答案稳定但路径漂移"现象：答案一致率 100%，但过程一致率仅 20%，提示部分答对题目可能依赖记忆/模板而非稳定推理。详见 `results/consistency_analysis_subset_small_report.md`。
 
@@ -628,6 +654,10 @@ L2 出现典型的"答案稳定但路径漂移"现象：答案一致率 100%，�
 | 🗳️ 三 judge 过程正确性完全一致率 | **48.10%**（76/158） | Hy3 + GPT-5.6-terra + Gemini-3-flash-preview；脚本 `scripts/compute_judge_agreement.py` |
 | 📌 三 judge 首错步完全匹配率 | **2.60%**（2/77） | 至少一方判错的样本上；说明"错误位置"的判定比"是否有错"更不稳定 |
 
+![评估器有效性验证指标汇总](assets/figures/validation_metrics.png)
+
+> 图：有效性验证六项核心指标一览（三裁判一致率取 418 题全量口径 79.94%，见迭代 9）。
+
 > 📝 所有"人工复核"均由一名计算机与数学相关专业的同学按《过程评估人工标注规范》逐条审核完成，审核记录见 `audit_outputs/`、`results/validation_real_errors.json`、`results/validation_false_positives.json`、`results/validation_cbu_injection.json`。
 
 **🔑 关键发现：**
@@ -653,6 +683,14 @@ FrontierMath v2 人工抽检记录见 `validation/frontiermath_spot_check.md`。
 > 📌 **统一口径**：本项目所有正式结论均基于 **418 题主实验集**（`dataset/problems_merged_full.jsonl`）。158 题合并集只是它的一个子集，仅用于快速复现与流程冒烟——README 和报告中标注"158 题子集"的数字均为中间结果，正式结论一律以 418 题为准。
 
 > 📦 **数据获取**：题目数据集文件（各 `dataset/**/*.jsonl` 及原始题源镜像）托管于 Hugging Face：[`yerr2/hy3-math-forensics-dataset`](https://huggingface.co/datasets/yerr2/hy3-math-forensics-dataset)，本仓库仅保留代码与文档。运行 `python scripts/download_dataset_from_hf.py --dest .` 即可下载。**2026-09-11** 起数据文件会由 GitHub Actions 定时 workflow（`.github/workflows/publish-dataset.yml`）自动回传并入本仓库。
+
+![数据集构成](assets/figures/dataset_composition.png)
+
+> 图：418 题按数据集分组（左）与难度分层（右）的构成。
+
+![题源分布](assets/figures/dataset_sources.png)
+
+> 图：15 个题源的题数分布，按污染风险高/中/低着色。
 
 ### 🏁 主实验集：418 题
 
@@ -761,6 +799,10 @@ FrontierMath v2 人工抽检记录见 `validation/frontiermath_spot_check.md`。
 | 🔄 迭代 7 | 多采样一致性分析（L7）+ L2 记忆/模板探测专项 | L2 全量 35 题：答案一致率 100% 但过程一致率仅 34.29%，"答案稳、路径飘"的记忆指纹 |
 | 🔄 迭代 8 | 数据集两轮扩充（158 → 386 → 418）并打多维标签；扰动变体与 GSM-Plus 对照簇入库 | 主实验集 418 题；扰动变体答案正确率最低（53.12%），证实模板匹配被破坏 |
 | 🔄 迭代 9 | 418 题主实验集三 Judge 全量评估；新增 Math-Shepherd 反向验证器（L8，推理时步骤级奖励评分） | 三裁判投票下 418 题过程正确率 69.86%、CBU 9.39%（单裁判为 84.45% / 5.08%），L4 过程正确率从 72.16% 降至 34.23%；反向验证器 15 题实测与 LLM judge 形成互补，CBU 注入检出 2/3 |
+
+![迭代进程：过程正确率演进](assets/figures/iteration_progress.png)
+
+> 图：初版至迭代 9 的过程正确率演进。158 题阶段各轮判定口径不完全一致（迭代 2 为三 judge 投票、迭代 4 为多 judge 149 道可判口径）；迭代 9 起切换到 418 题主实验集口径（单裁判 84.45% / 三裁判 69.86%）。
 
 ### 🧪 关键尝试与失败（节选）
 
