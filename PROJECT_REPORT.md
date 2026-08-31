@@ -79,7 +79,7 @@
 - 项目为个人/活动作品，README 与报告已明确标注。
 - 仅通过 API 调用 Hy3，不训练、不微调。
 - API Key 通过环境变量 / `.env` 传入，未硬编码进仓库。
-- 运行环境复用工作空间中的 `/path/to/venv`（PyTorch 2.11.0+cu130、vLLM 0.22.0）。
+- 运行环境为 Python 虚拟环境（PyTorch 2.11.0+cu130、vLLM 0.22.0）。
 
 ---
 
@@ -1025,8 +1025,8 @@ L2 全部 35 题均来自高污染风险数据集（MATH / AGIEval）。将“�
 
 引入两个外部裁判：
 
-- **gpt-5.6-terra** @ `https://your-openai-compatible-endpoint/api/v1`
-- **gemini-3-flash-preview** @ `https://your-openai-compatible-endpoint/api/v1`
+- **gpt-5.6-terra** @ 外部 OpenAI 兼容 API 网关
+- **gemini-3-flash-preview** @ 外部 OpenAI 兼容 API 网关
 
 与本地 Hy3 组成三 judge 投票。
 

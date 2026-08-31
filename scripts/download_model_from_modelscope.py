@@ -21,7 +21,7 @@ def main():
     parser.add_argument(
         "--output",
         type=str,
-        default="/path/to/workspace/hy3-math-eval/models/hy3-gptq-int4",
+        default="./models/hy3-gptq-int4",
         help="Output directory",
     )
     parser.add_argument(

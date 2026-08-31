@@ -351,7 +351,7 @@ def compute_batch_b_metrics(annotations: List[Dict]):
 
 def main():
     parser = argparse.ArgumentParser(description="GPT manual audit per annotation guideline")
-    parser.add_argument("--base_url", type=str, default=os.getenv("JUDGE_GPT_API_BASE", "https://your-openai-compatible-endpoint/api/v1"))
+    parser.add_argument("--base_url", type=str, default=os.getenv("JUDGE_GPT_API_BASE", "https://your-openai-compatible-endpoint/v1"))
     parser.add_argument("--api_key", type=str, default=os.getenv("JUDGE_GPT_API_KEY", ""))
     parser.add_argument("--model", type=str, default="gpt-5.6-terra")
     parser.add_argument("--problems", type=str, default="dataset/problems_merged.jsonl")

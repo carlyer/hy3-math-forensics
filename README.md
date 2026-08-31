@@ -162,16 +162,24 @@ hy3-math-eval/
 
 ### 1️⃣ 基础环境
 
-本项目复用工作空间中的 `/path/to/venv`（已预装 PyTorch 2.11.0+cu130、vLLM 0.22.0、transformers 等）：
+需要 Python 3.10+，并安装 PyTorch（>=2.1，需匹配你的 CUDA 版本）、vLLM、transformers 等基础依赖。建议使用独立的虚拟环境：
 
 ```bash
-source /path/to/venv/bin/activate
+# 方式一：venv
+python3 -m venv .venv
+source .venv/bin/activate
+
+# 方式二：conda
+conda create -n hy3-math-eval python=3.10
+conda activate hy3-math-eval
 ```
+
+激活虚拟环境后使用 `python3`/`pip` 执行后续命令。
 
 ### 2️⃣ 安装额外依赖
 
 ```bash
-cd /path/to/workspace/hy3-math-eval
+cd hy3-math-eval
 pip install -r requirements.txt
 ```
 
@@ -192,8 +200,8 @@ HY3_API_KEY=dummy
 为防止 **Hy3 自评（自己给自己打分）** 导致分数虚高，单 judge 模式已默认优先使用外部 GPT 裁判。请在 `.env` 中配置：
 
 ```bash
-# 单 judge 默认裁判（强烈推荐使用外部模型）
-JUDGE_GPT_API_BASE=https://your-openai-compatible-endpoint/api/v1
+# 单 judge 默认裁判（强烈推荐使用外部模型；填你的 OpenAI 兼容 API 网关地址）
+JUDGE_GPT_API_BASE=https://your-openai-compatible-endpoint/v1
 JUDGE_GPT_API_KEY=your_key
 JUDGE_GPT_MODEL=gpt-5.6-terra
 ```
@@ -210,12 +218,12 @@ JUDGE_HY3_API_BASE=http://0.0.0.0:8002/v1
 JUDGE_HY3_API_KEY=dummy
 JUDGE_HY3_MODEL=hy3-gptq-int4
 
-# 外部 GPT/Gemini 裁判
-JUDGE_GPT_API_BASE=https://your-openai-compatible-endpoint/api/v1
+# 外部 GPT/Gemini 裁判（填你的 OpenAI 兼容 API 网关地址）
+JUDGE_GPT_API_BASE=https://your-openai-compatible-endpoint/v1
 JUDGE_GPT_API_KEY=your_key
 JUDGE_GPT_MODEL=gpt-5.6-terra
 
-JUDGE_GEMINI_API_BASE=https://your-openai-compatible-endpoint/api/v1
+JUDGE_GEMINI_API_BASE=https://your-openai-compatible-endpoint/v1
 JUDGE_GEMINI_API_KEY=your_key
 JUDGE_GEMINI_MODEL=gemini-3-flash-preview
 ```
@@ -316,7 +324,7 @@ python scripts/generate_final_report.py \
 ```bash
 bash scripts/run_web_app.sh
 # 或
-WEBAPP_PORT=7860 /path/to/venv/bin/python3 -m uvicorn app.web_app:app --host 0.0.0.0 --port 7860
+WEBAPP_PORT=7860 python3 -m uvicorn app.web_app:app --host 0.0.0.0 --port 7860
 ```
 
 访问 http://localhost:7860 即可使用。
@@ -675,7 +683,7 @@ high 风险组（GSM8K/MATH 等常见数据集）答案正确率显著高于 med
 |---|---|---|
 | 🐣 初版 | 规则 + sympy + LLM-as-judge 单层评估 | 过程正确率约 62%，CBU 识别不足 |
 | 🔄 迭代 1 | 新增输出截断/未完成检测器；L4 启用 Research 严格 judge prompt | 过程正确率 55.06%，CBU 10.74%；FM-v2-011 截断漏判被修复 |
-| 🔄 迭代 2 | 新增多 judge 交叉投票框架；适配 内部 AI 网关 的 gpt-5.6-terra/gemini-3.5-flash | 三 judge 投票下过程正确率 51.90%，CBU 14.09% |
+| 🔄 迭代 2 | 新增多 judge 交叉投票框架；适配外部 API 网关的 gpt-5.6-terra/gemini-3.5-flash | 三 judge 投票下过程正确率 51.90%，CBU 14.09% |
 | 🔄 迭代 3 | 抑制 sympy 解析 set-like 表达式时产生的 SyntaxWarning | 评估日志不再刷屏 |
 | 🔄 迭代 4 | answer_checker 等价形式归一化；step_validator 保守化；修正 L2 gold 标签；judge prompt 加 few-shot 示例 | 158 题全量：答案正确率 67.09%，GPT 单裁判过程正确率 67.09%、CBU 12.66%；多 judge（149 道可判题）：答案正确率 67.79%、过程正确率 61.39%、CBU 5.37% |
 | 🔄 迭代 5 | LLM-as-judge 默认改为 GPT-5.6-terra 外部裁判，避免 Hy3 自评 | 多 judge 结果文件（149 道可判题）：单 judge（GPT）过程正确率 56.33%、CBU 12.08%；三 judge 过程正确率 61.39%、CBU 5.37% |

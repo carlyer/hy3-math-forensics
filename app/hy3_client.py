@@ -306,7 +306,7 @@ def load_client_from_env() -> Hy3MathClient:
             model_name=model_name,
         )
 
-    default_path = "/path/to/workspace/bifrost-2026082410005000-内部网关/path/to/hy3-gptq-int4"
+    default_path = "/path/to/hy3-gptq-int4"
     model_path = os.environ.get("HY3_MODEL_PATH", default_path)
     tp_size = int(os.environ.get("HY3_TP_SIZE", "2"))
     max_model_len = int(os.environ.get("HY3_MAX_MODEL_LEN", "8192"))

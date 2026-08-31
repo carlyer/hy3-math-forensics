@@ -6,7 +6,7 @@
 
 set -e
 
-cd /path/to/workspace/hy3-math-eval
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # 加载 .env（如果存在）
 if [ -f .env ]; then
@@ -14,7 +14,7 @@ if [ -f .env ]; then
 fi
 
 # 本地模型回退配置（仅未设置 HY3_API_BASE 时生效）
-export HY3_MODEL_PATH=${HY3_MODEL_PATH:-/path/to/workspace/bifrost-2026082410005000-内部网关/path/to/hy3-gptq-int4}
+export HY3_MODEL_PATH=${HY3_MODEL_PATH:-/path/to/hy3-gptq-int4}
 export HY3_TP_SIZE=${HY3_TP_SIZE:-2}
 export HY3_MAX_MODEL_LEN=${HY3_MAX_MODEL_LEN:-8192}
 export VLLM_FLASHINFER_ALLREDUCE_BACKEND=${VLLM_FLASHINFER_ALLREDUCE_BACKEND:-trtllm}

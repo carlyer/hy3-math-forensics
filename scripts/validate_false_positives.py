@@ -1,4 +1,4 @@
-#!/path/to/venv/bin/python3
+#!/usr/bin/env python3
 """Validate the false-positive rate of the process evaluator on Hy3 samples.
 
 Filter: answer_correct == True and process_correct == True, excluding

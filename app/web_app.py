@@ -7,8 +7,8 @@
 - 题库选择：从 dataset/problems_merged_v2.jsonl 中任选题目
 
 启动:
-    cd /path/to/workspace/hy3-math-eval
-    /path/to/venv/bin/python3 -m uvicorn app.web_app:app --host 0.0.0.0 --port 7860
+    cd hy3-math-eval
+    python3 -m uvicorn app.web_app:app --host 0.0.0.0 --port 7860
 
 访问:
     http://localhost:7860

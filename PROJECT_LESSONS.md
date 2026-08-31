@@ -59,7 +59,7 @@
 
 ### 2.1 本地 vLLM 加载与显存/环境冲突
 
-**困难**：项目复用工作空间 `/path/to/venv`，但本地加载 `hy3-gptq-int4` 需要多卡、显存充足，且不同任务同时运行时容易冲突。
+**困难**：项目复用共享 Python 虚拟环境，但本地加载 `hy3-gptq-int4` 需要多卡、显存充足，且不同任务同时运行时容易冲突。
 
 **思考**：优先使用已部署的 OpenAI 兼容 API 服务，本地加载只作为 fallback。
 
@@ -336,7 +336,7 @@
 |---|---|---|---|
 | 初版 | 规则 + sympy + LLM-as-judge 单层评估 | 过程正确率约 62%，CBU 识别不足 | 过程正确率还可以，但 CBU 与截断问题未解决，需要增加专门模块 |
 | 迭代 1 | 新增输出截断/未完成检测器；L4 启用 Research 严格 judge prompt | 过程正确率 55.06%，CBU 10.74%；FM-v2-011 截断漏判被修复 | Research prompt 更严格，过程正确率下降、CBU 上升符合预期；但 10.74% CBU 偏高，怀疑有假阳性 |
-| 迭代 2 | 新增多 judge 交叉投票框架；适配 内部 AI 网关 的 gpt-5.6-terra / gemini-3.5-flash | 三 judge 下过程正确率 51.90%，CBU 14.09% | 多 judge 更严格，但 CBU 继续升高，需要审计这些 CBU 是真是假 |
+| 迭代 2 | 新增多 judge 交叉投票框架；适配外部 API 网关的 gpt-5.6-terra / gemini-3.5-flash | 三 judge 下过程正确率 51.90%，CBU 14.09% | 多 judge 更严格，但 CBU 继续升高，需要审计这些 CBU 是真是假 |
 | 迭代 3 | 抑制 sympy 解析 set-like 表达式时产生的 SyntaxWarning | 评估日志不再刷屏 | 属于工程清理，不影响指标 |
 | 迭代 4 | answer_checker 等价形式归一化；step_validator 保守化；修正 L2 gold 标签；judge prompt 加 few-shot 示例 | 答案正确率 67.79%，Hy3 自审过程正确率 67.09%、CBU 0%；三 judge 过程正确率 61.39%、CBU 5.37% | 数据层 bug 和规则层假阳性消除，但单 judge 仍是 Hy3 自审，存在自评虚高风险 |
 | 迭代 5（最终） | LLM-as-judge 默认改为 GPT-5.6-terra 外部裁判，避免 Hy3 自评 | 答案正确率 67.79%，单 judge（GPT）过程正确率 56.33%、CBU 12.08%；三 judge 过程正确率 61.39%、CBU 5.37% | 外部裁判更严格，真实暴露“答案对但过程不成立”；三 judge 因 Hy3 自审拉低严格度，反而比 GPT 单裁判宽松 |

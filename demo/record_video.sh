@@ -4,7 +4,7 @@
 
 set -e
 
-cd /path/to/workspace/hy3-math-eval
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 PROBLEM_ID=${1:-L1-001}
 DEMO_DIR=$(dirname "$0")

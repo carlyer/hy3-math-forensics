@@ -4,7 +4,7 @@
 
 set -e
 
-cd /path/to/workspace/hy3-math-eval
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 if [ -f .env ]; then
   export $(grep -v '^#' .env | xargs)

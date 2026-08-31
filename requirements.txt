@@ -1,4 +1,4 @@
-# 项目额外依赖（基础环境 /path/to/venv 已包含 torch、vllm、transformers）
+# 项目额外依赖（基础环境需已安装 torch、vllm、transformers）
 sympy>=1.12
 numpy>=1.26
 pandas>=2.0

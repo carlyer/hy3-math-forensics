@@ -3,14 +3,14 @@
 
 set -e
 
-cd /path/to/workspace/hy3-math-eval
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # 默认使用 API 服务；如需本地推理，取消设置 HY3_API_BASE
 export HY3_API_BASE=${HY3_API_BASE:-http://0.0.0.0:8002/v1}
 export HY3_MODEL_NAME=${HY3_MODEL_NAME:-hy3-gptq-int4}
 
 # 本地模式参数（仅在未设置 HY3_API_BASE 时生效）
-export HY3_MODEL_PATH=${HY3_MODEL_PATH:-/path/to/workspace/bifrost-2026082410005000-内部网关/path/to/hy3-gptq-int4}
+export HY3_MODEL_PATH=${HY3_MODEL_PATH:-/path/to/hy3-gptq-int4}
 export HY3_TP_SIZE=${HY3_TP_SIZE:-2}
 export HY3_MAX_MODEL_LEN=${HY3_MAX_MODEL_LEN:-4096}
 export VLLM_FLASHINFER_ALLREDUCE_BACKEND=${VLLM_FLASHINFER_ALLREDUCE_BACKEND:-trtllm}
