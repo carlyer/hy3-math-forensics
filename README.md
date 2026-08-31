@@ -67,17 +67,9 @@ hy3-math-eval/
 │   ├── convert_math_data.py         # 转换外部公开数据集
 │   ├── convert_frontiermath.py      # FrontierMath v2 样本转换
 │   ├── answer_checker.py            # 标准答案自动校验
-│   ├── problems.jsonl               # 主库：146 题（L1~L4）
-│   ├── frontiermath_v2_converted.jsonl  # FrontierMath v2：12 题
-│   ├── problems_merged.jsonl        # 合并题集：158 题
-│   ├── problems_merged_full.jsonl   # 完整主实验集：418 题（158 原题 + 228 新题 + 32 扰动变体）
 │   ├── problems_merged_full_stats.md # 418 题多维分类统计
-│   ├── problems_consistency_subset.jsonl  # 多采样一致性子集：40 题
-│   ├── problems_l2_all.jsonl        # 全量 L2 题：35 题
-│   ├── problems_labeled_merged.jsonl# 注入错误验证集：28 条
-│   ├── cbu_injection_samples.jsonl  # CBU 注入样本：9 条
-│   ├── problems_perturbed.jsonl     # 16 原题 × 2 种扰动变体：32 条
-│   └── problems_merged_v2.jsonl     # 扩展评测集：386 题
+│   └── *.jsonl                      # 题目数据文件托管于 Hugging Face（见 📚 数据集章），
+│                                    # 含 418 题主实验集 / 158 题子集 / 扰动变体 / 注入验证集等
 ├── evaluator/                       # 过程评估模块
 │   ├── process_evaluator.py         # 评估主入口
 │   ├── step_validator.py            # 单步规则+符号验证
@@ -289,7 +281,16 @@ python evaluator/evaluate.py \
 <summary>📂 点击展开：从构建题库到可视化的完整流程</summary>
 
 
-> 💡 快速开始默认使用 **158 题快速复现子集**（十几分钟跑通全链路）；正式结论对应的是 418 题主实验集（`dataset/problems_merged_full.jsonl`，已随仓库提供，无需重新构建），二者关系见 📚 数据集章。
+> 💡 快速开始默认使用 **158 题快速复现子集**（十几分钟跑通全链路）；正式结论对应的是 418 题主实验集（`dataset/problems_merged_full.jsonl`），二者关系见 📚 数据集章。题目数据文件托管于 Hugging Face，需先执行第 ⓪ 步下载。
+
+### ⓪ 下载题目数据集
+
+```bash
+pip install huggingface_hub
+python scripts/download_dataset_from_hf.py --dest .
+```
+
+> 数据集仓库：[Carlyer/hy3-math-forensics-dataset](https://huggingface.co/datasets/Carlyer/hy3-math-forensics-dataset)。2026-09-11 起数据文件会由定时 workflow 自动并入本仓库，届时可跳过本步。
 
 ### ① 构建题库
 
@@ -650,6 +651,8 @@ FrontierMath v2 人工抽检记录见 `validation/frontiermath_spot_check.md`。
 
 
 > 📌 **统一口径**：本项目所有正式结论均基于 **418 题主实验集**（`dataset/problems_merged_full.jsonl`）。158 题合并集只是它的一个子集，仅用于快速复现与流程冒烟——README 和报告中标注"158 题子集"的数字均为中间结果，正式结论一律以 418 题为准。
+
+> 📦 **数据获取**：题目数据集文件（各 `dataset/**/*.jsonl` 及原始题源镜像）托管于 Hugging Face：[`Carlyer/hy3-math-forensics-dataset`](https://huggingface.co/datasets/Carlyer/hy3-math-forensics-dataset)，本仓库仅保留代码与文档。运行 `python scripts/download_dataset_from_hf.py --dest .` 即可下载。**2026-09-11** 起数据文件会由 GitHub Actions 定时 workflow（`.github/workflows/publish-dataset.yml`）自动回传并入本仓库。
 
 ### 🏁 主实验集：418 题
 
