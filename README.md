@@ -513,6 +513,7 @@ python demo/demo.py --problem "解方程 2x + 5 = 13。"
 | 干扰插入（GSM-Plus） | 95.00% | 90.00% |
 
 > 🔑 **关键发现**：GSM8K 原题 100% 全对，但仅替换数字后准确率降至 80%，这是**记忆/背诵**的典型指纹。
+> ⚠️ 诚实声明：数值替换组的"答错"题中有 2~3 道实为 gold 标签噪音/checker 解析问题（详见 `ANALYSIS_REPORT.md` §3.7），方向可靠但幅度可能被高估。
 
 #### 16 原题扰动簇（surface_rewrite / add_noise）
 
@@ -746,7 +747,7 @@ FrontierMath v2 人工抽检记录见 `validation/frontiermath_spot_check.md`。
 
 - **perturbation_32**：对 16 道 high/medium 风险原题生成 `surface_rewrite`（换人名/情境/句式）与 `add_noise`（插入无关条件）两种变体，脚本 `dataset/perturb_problems.py`；
 - **GSM-Plus 40 题**：20 个原题簇 ×（数值替换 + 干扰插入），对应原题取自 GSM8K 组；
-- 对照实验结果见 📊 章「扰动变体对照实验」：GSM8K 原题 100% 全对、仅换数字即跌至 80%，是记忆/背诵的典型指纹。
+- 对照实验结果见 📊 章「扰动变体对照实验」：GSM8K 原题 100% 全对、仅换数字即跌至 80%，是记忆/背诵的典型指纹（幅度含 gold 噪音，详见 `ANALYSIS_REPORT.md` §3.7）。
 
 ### ⚡ 快速复现子集：158 题
 
