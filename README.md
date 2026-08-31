@@ -271,6 +271,8 @@ python evaluator/evaluate.py \
 
 ## 🚀 快速开始
 
+> 💡 快速开始默认使用 **158 题快速复现子集**（十几分钟跑通全链路）；正式结论对应的是 418 题主实验集（`dataset/problems_merged_full.jsonl`，已随仓库提供，无需重新构建），二者关系见 📚 数据集章。
+
 ### ① 构建题库
 
 ```bash
@@ -601,84 +603,70 @@ FrontierMath v2 人工抽检记录见 `validation/frontiermath_spot_check.md`。
 
 ## 📚 数据集
 
-### 🗄 主库 146 题
+> 📌 **统一口径**：本项目所有正式结论均基于 **418 题主实验集**（`dataset/problems_merged_full.jsonl`）。158 题合并集只是它的一个子集，仅用于快速复现与流程冒烟——README 和报告中标注"158 题子集"的数字均为中间结果，正式结论一律以 418 题为准。
 
-| 层级 | 题数 | 主要来源 |
-|:---:|:---:|---|
-| L1 | 30 | GSM8K + Math23K |
-| L2 | 35 | MATH Level 2-3 + AGIEval |
-| L3 | 47 | MATH Level 4-5 + OlympiadBench + Omni-MATH + AMC12 |
-| L4 | 34 | AIME + AMC/AIME-HF |
-
-### 🧪 FrontierMath v2 附录
-
-12 道研究级公开样本，原始 tier 覆盖 Tier 1~4，本项目统一归为 L4。其中 3 道有公开答案，9 道标记为 `manual_check`。
-
-### ☣️ 数据污染风险说明
-
-合并题集 `dataset/problems_merged.jsonl` 已为每题标注 `contamination_risk` 字段，按题源污染风险分为三级：
-
-- 🔴 **high**：GSM8K、Math23K、Ape210K、MATH、AGIEval 等常见预训练/微调数据集；
-- 🟡 **medium**：AMC、AIME、AMC/AIME-HF、OlympiadBench、Omni-MATH 等竞赛/考试题源；
-- 🟢 **low**：FrontierMath-v2、perturbation 变体、自构造题等研究级新题或扰动题。
-
-该项目旨在区分"真实推理"与"记忆/背诵"表现：过程评估本身可暴露记忆型解答（答案对但过程缺失/模板化）。我们已通过 `dataset/perturb_problems.py` 对 16 道 high/medium 风险原题生成 32 条扰动变体（`surface_rewrite` + `add_noise`），对照实验显示扰动后答案正确率基本持平，但过程正确率从 62.50% 降至 56.25%，CBU 率从 0.00% 升至 9.38%，说明表面变化会诱使模型生成"答案对但过程不成立"的解答。
-
-按风险等级分组的 Hy3 表现（单 judge = GPT-5.6-terra，已修正 L2 gold 标签）：
-
-| 风险等级 | 题数 | 答案正确率 | 过程正确率 | 严格过程正确率 | CBU 率 |
-|:---:|:---:|:---:|:---:|:---:|:---:|
-| 🔴 high | 77 | 94.81% | 84.42% | 80.52% | 14.29% |
-| 🟡 medium | 69 | 40.58% | 33.33% | 30.43% | 10.14% |
-| 🟢 low | 12 | 0.00% | 8.33% | 0.00% | 0.00% |
-
-high 风险组（GSM8K/MATH 等常见数据集）答案正确率显著高于 medium 组，但外部 GPT 裁判下 high 组 CBU 率高达 14.29%，说明该组大量答对题目存在过程不严谨问题，提示污染/记忆风险可能被放大。medium 组（竞赛/考试题源）的过程正确率仍明显低于答案正确率。low 组（FrontierMath-v2）基本全部未答对，与研究级难度一致。
-
-我们进一步对 16 道 high/medium 风险原题生成了 32 条扰动变体（`surface_rewrite` + `add_noise`）。对比发现：扰动后答案正确率基本持平，但**过程正确率从 62.50% 降至 56.25%，CBU 率从 0.00% 升至 9.38%**，说明表面变化会诱使模型产生"答案对但过程不成立"的解答。完整实验设计与结果见 [`PROJECT_REPORT.md`](PROJECT_REPORT.md) 的「扰动变体对照实验」小节与 `results/perturbation_analysis.md`。
-
-### 📈 扩展评测集 v2（386 题）
-
-除原始 158 题合并题集外，我们还从 `dataset/math-data/math-data/new_expand/problems_v2.jsonl`（779 题）中清洗、去重、采样，生成了扩展评测集：
-
-| 数据集 | 总题数 | L1 | L2 | L3 | L4 |
-|---|:---:|:---:|:---:|:---:|:---:|
-| `problems_merged.jsonl` | 158 | 30 | 35 | 47 | 46 |
-| `problems_merged_v2.jsonl` | **386** | 90 | 100 | 93 | 103 |
-
-扩展流程：
-
-1. **去重**：剔除与现有 158 题题面完全重复的 9 道题；
-2. **保留 GSM-Plus 变体簇**：20 个原题 + 数值替换 + 干扰插入三元组，共 60 题，用于扰动/鲁棒性分析；
-3. **优先自动判分**：`exact_match` / `choice_match` / `symbolic_equivalence` 占 362 题，仅 L3/L4 自动判分题不足时纳入 24 道 `manual_check` 证明题；
-4. **来源多样化**：新增题来自 AGIEval、MiniF2F、AIME-AMC12/train、2026-Gaokao、AIME-2025、MMLU-Pro/math、Omni-MATH 等。
-
-扩展报告见 `results/dataset_expansion_report.md`，处理脚本见 `scripts/expand_dataset_v2.py`。
-
-### 🏁 完整主实验集（418 题）
-
-为获得更大规模、更多样的评测结果，我们将 386 题扩展集与 32 条扰动变体合并为 `dataset/problems_merged_full.jsonl`，共 **418 题**。
+### 🏁 主实验集：418 题
 
 | 分组 | 题数 | 说明 |
 |---|:---:|---|
-| `original_158` | 158 | 原 158 题（含 146 道 L1-L4 + 12 道 FM-v2） |
-| `ext_228` | 228 | 386 扩展集中新增题 |
-| `perturbation_32` | 32 | 16 原题 × 2 种扰动变体（surface_rewrite / add_noise） |
+| `original_158` | 158 | 首批合并题集（146 道 L1–L4 主库 + 12 道 FrontierMath v2 研究级题） |
+| `ext_228` | 228 | 第二批扩展：公开数据集采样 + 手工/新考试补充 |
+| `perturbation_32` | 32 | 16 道原题 × 2 种扰动变体（surface_rewrite / add_noise），用于污染/记忆对照 |
 | **总计** | **418** | |
 
-每道题均增加了多维标签：
+难度分层，覆盖从基础到研究级：
 
-| 标签维度 | 取值 |
-|---|---|
-| `level` | L1 / L2 / L3 / L4 |
-| `dataset_group` | original_158 / ext_228 / frontiermath_12 / perturbation_32 |
-| `variant_type` | original / numerical_substitution / distraction_insertion / surface_rewrite / add_noise |
-| `problem_form` | open / choice / proof / unknown |
-| `verification_method_tag` | formal_proof / verifiable_answer / human_evaluation |
-| `problem_type_tag` | elementary_math / college_math / competition_math / formal_math |
-| `evaluation_goal_tags` | problem_solving_accuracy / proof_completion_rate / generalization / reasoning_depth / robustness |
-| `contamination_risk` | 🔴 high / 🟡 medium / 🟢 low |
+| 难度 | 🟢 L1 | 🟡 L2 | 🟠 L3 | 🔴 L4 |
+|---|:---:|:---:|:---:|:---:|
+| 题数 | 98 | 108 | 101 | 111 |
+| 定位 | 小学/初中应用题 | 中学综合（含选择题） | 高中竞赛 | 竞赛/研究级 |
 
-多维分类统计见 `dataset/problems_merged_full_stats.md`，生成脚本见 `scripts/merge_full_dataset.py`。
+每道题均带多维标签：`level`（难度）、`dataset_group`（分组）、`variant_type`（变体类型）、`problem_form`（开放/选择/证明）、`verification_method_tag`（可计算答案/形式化证明/人工评判）、`problem_type_tag`（初等/高等/竞赛/形式数学）、`evaluation_goal_tags`（正确率/泛化/推理深度/鲁棒性）、`contamination_risk`（污染风险）。多维分类统计见 `dataset/problems_merged_full_stats.md`，生成脚本见 `scripts/merge_full_dataset.py`。
+
+### 🧬 题源与污染标注
+
+每道题均标注 `contamination_risk`，用于区分"真实推理"与"记忆/背诵"：
+
+| 题源 | 题数 | 出处 | 污染风险 |
+|---|:---:|---|:---:|
+| AGIEval（高考/SAT 等考试题） | 68 | [microsoft/AGIEval](https://github.com/microsoft/AGIEval) | 🔴 high 为主 |
+| MATH | 46 | [hendrycks/math](https://github.com/hendrycks/math) | 🔴 high 为主 |
+| GSM8K | 42 | [openai/grade-school-math](https://github.com/openai/grade-school-math) | 🔴 high 为主 |
+| GSM-Plus（数值替换/干扰插入变体） | 40 | [arXiv:2402.19255](https://arxiv.org/abs/2402.19255) | 🟢 low |
+| AIME 历年题 | 33 | [AoPS Wiki](https://artofproblemsolving.com/wiki/index.php/AIME_Problems_and_Solutions) | 🟡 medium |
+| Omni-MATH（奥赛题库） | 30 | [KbsdJames/Omni-MATH](https://github.com/KbsdJames/Omni-MATH) | 🟡 medium |
+| AIME-AMC12/train | 30 | HuggingFace 公开集 | 🔴 high |
+| MMLU-Pro/math | 20 | [TIGER-Lab/MMLU-Pro](https://huggingface.co/datasets/TIGER-Lab/MMLU-Pro) | 🟡 medium |
+| Math23K（中文应用题） | 16 | 公开数据集 | 🔴 high 为主 |
+| OlympiadBench | 15 | [THUDM/OlympiadBench](https://github.com/THUDM/OlympiadBench) | 🟡 medium |
+| AMC12 | 14 | [AoPS Wiki](https://artofproblemsolving.com/wiki/index.php/AMC_12_Problems_and_Solutions) | 🟡 medium |
+| **手工与新考试补充** | 31 | 见下方说明 | 🟢 low |
+| MiniF2F（形式化证明） | 12 | [openai/miniF2F](https://github.com/openai/miniF2F) | 🟡 medium |
+| FrontierMath v2（研究级） | 12 | [epoch.ai/frontiermath](https://epoch.ai/frontiermath) | 🟢 low |
+| AMC/AIME-HF | 9 | HuggingFace 公开集 | 🟡 medium |
+
+**手工与新考试补充**（31 题，全部人工整理校对并附标准答案，🟢 low 污染）：
+
+- 📄 **2026 高考数学**（17 题）——最新高考真题，发布晚于主流模型训练数据截止；
+- 🏅 **AIME 2025/2026**（14 题）——最新届美国数学邀请赛试题，来源 [AoPS Wiki](https://artofproblemsolving.com/wiki/index.php/AIME_Problems_and_Solutions)；
+- 🏆 **全国高中数学联赛二试、CMO、IMO 2026** 等——最新竞赛题，来源 [IMO 官方题库](https://www.imo-official.org/problems.aspx) 及公开竞赛资料，随 Omni-MATH 渠道与手工整理补充。
+
+这些"发布时间晚于训练数据截止"的新题是检测记忆依赖的关键对照组。
+
+### 🌀 扰动变体（记忆/污染对照）
+
+- **perturbation_32**：对 16 道 high/medium 风险原题生成 `surface_rewrite`（换人名/情境/句式）与 `add_noise`（插入无关条件）两种变体，脚本 `dataset/perturb_problems.py`；
+- **GSM-Plus 40 题**：20 个原题簇 ×（数值替换 + 干扰插入），对应原题取自 GSM8K 组；
+- 对照实验结果见 📊 章「扰动变体对照实验」：GSM8K 原题 100% 全对、仅换数字即跌至 80%，是记忆/背诵的典型指纹。
+
+### ⚡ 快速复现子集：158 题
+
+`dataset/problems_merged.jsonl`（146 道主库 + 12 道 FrontierMath v2）是 418 题主实验集的子集，用于：
+
+- 一键流程冒烟：`bash scripts/run_merged_pipeline.sh` 十几分钟即可跑通"生成 → 评估 → 报告"全链路；
+- 评估器有效性验证（定位准确率、误报率、CBU 检出率等均先在该子集上完成）。
+
+> ☣️ 污染风险三级定义：🔴 **high** = 常见预训练/微调数据集（GSM8K、MATH、AGIEval 等）；🟡 **medium** = 竞赛/考试题源（AMC/AIME、OlympiadBench、Omni-MATH 等）；🟢 **low** = 研究级新题、最新考试题、扰动变体与自构造题。
 
 ---
 
