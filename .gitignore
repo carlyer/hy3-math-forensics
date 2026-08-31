@@ -62,3 +62,6 @@ dataset/**/*.zip
 dataset/**/test.lean
 dataset/**/AIME1_source.txt
 dataset/frontiermath_v2_sample_12_problems.json
+
+# Demo 原始录屏（139MB，不入库）
+demo/demo.mov
