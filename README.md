@@ -86,6 +86,7 @@ hy3-math-eval/
 │   ├── back_substitution.py         # 回代验证器
 │   ├── consistency_analyzer.py      # 多采样一致性分析
 │   ├── memory_detection_metrics.py  # 记忆 / 模板探测指标
+│   ├── reverse_verifier.py          # Math-Shepherd 反向验证器（步骤级奖励评分）
 │   ├── evaluate.py                  # 批量评估
 │   └── validate_evaluator.py        # 评估器有效性验证
 ├── scripts/                         # 运行脚本
@@ -105,7 +106,8 @@ hy3-math-eval/
 │   ├── hy3_proxy.py                 # 为 React 工作台提供 CORS 代理
 │   ├── validate_real_errors.py      # 真实答错题定位准确率验证
 │   ├── validate_false_positives.py  # 正确样本误报率验证
-│   └── validate_cbu_injection.py    # CBU 注入样本检出率验证
+│   ├── validate_cbu_injection.py    # CBU 注入样本检出率验证
+│   └── run_reverse_verification.py  # 反向验证器批量运行
 ├── frontend/                        # React + Vite 可视化工作台（浏览器端直连 Hy3 API）
 │   ├── package.json
 │   ├── src/
@@ -539,6 +541,7 @@ L2 出现典型的"答案稳定但路径漂移"现象：答案一致率 100%，�
 | L5 | 🕸 依赖图验证 | 要求模型每步标注 `depends_on`，构建有向图 | 跳步（依赖链断裂）、循环论证（图环） |
 | L6 | ⏪ 回代验证 | sympy 将最终答案代回原题约束 | 答案等价性争议、CBU 铁证 |
 | L7 | 🔁 多采样一致性 | temperature > 0 采样 N 次，比较答案/路径 | 记忆/背诵、推理不稳定、侥幸猜中 |
+| L8 | 🐑 反向验证（Math-Shepherd） | 步骤前缀续写采样，到达正确答案的经验概率作为步骤分 | 步骤级错误定位、CBU 检测（与 judge 互补） |
 
 ### 🎲 结果正确但过程不成立（CBU）
 
@@ -676,8 +679,40 @@ high 风险组（GSM8K/MATH 等常见数据集）答案正确率显著高于 med
 | 🔄 迭代 3 | 抑制 sympy 解析 set-like 表达式时产生的 SyntaxWarning | 评估日志不再刷屏 |
 | 🔄 迭代 4 | answer_checker 等价形式归一化；step_validator 保守化；修正 L2 gold 标签；judge prompt 加 few-shot 示例 | 158 题全量：答案正确率 67.09%，GPT 单裁判过程正确率 67.09%、CBU 12.66%；多 judge（149 道可判题）：答案正确率 67.79%、过程正确率 61.39%、CBU 5.37% |
 | 🔄 迭代 5 | LLM-as-judge 默认改为 GPT-5.6-terra 外部裁判，避免 Hy3 自评 | 多 judge 结果文件（149 道可判题）：单 judge（GPT）过程正确率 56.33%、CBU 12.08%；三 judge 过程正确率 61.39%、CBU 5.37% |
+| 🔄 迭代 6 | 418 题主实验集三 Judge 全量评估；新增 Math-Shepherd 反向验证器（推理时步骤级奖励评分） | 三裁判投票下 418 题过程正确率 69.86%、CBU 9.39%（单裁判为 84.45% / 5.08%），L4 过程正确率从 72.16% 降至 34.23%；反向验证器 15 题实测与 LLM judge 形成互补，CBU 注入检出 2/3 |
 
-### ⚖️ 单 judge vs 多 judge 对比（修复后）
+### ⚖️ 418 题全量：单 judge vs 三 judge 投票
+
+> 📌 本节数据来自 `results/evaluation_merged_full_multi_judge.json`（418 题完整主实验集，与单裁判结果共享同一份解答快照，答案准确率完全一致）。
+
+| 指标 | 单 judge（GPT-5.6-terra） | 三 judge 投票（Hy3 + GPT + Gemini） |
+|---|:---:|:---:|
+| 最终答案准确率 | 68.27%（269/394） | 68.27%（269/394） |
+| 过程正确率 | 84.45%（353/418） | **69.86%** |
+| 严格过程正确率 | 63.20%（249/394） | **58.88%** |
+| CBU 率 | 5.08%（20/394） | **9.39%** |
+
+分层过程正确率对比（单裁判 → 三裁判）：L1 95.92% → 95.92% ｜ L2 83.33% → 88.89% ｜ L3 86.81% → 63.37% ｜ **L4 72.16% → 34.23%**。
+
+三裁判投票在高难度题上显著更严格：L4 过程正确率近乎腰斩，CBU 率升至 21.65%（L4），说明单裁判对高难度题的过程审查过于宽松，大量"答对"样本经不起三个裁判交叉复核。裁判一致性（418 全量，339 个有效三元组）：过程正确性完全一致率 **79.94%**（158 题子集为 48.10%），两两 Cohen's κ 在 **0.53 ~ 0.60** 之间，首错步完全匹配率 **11.22%**（11/98）。
+
+### 🐑 Math-Shepherd 反向验证器（迭代 6 新增）
+
+新增 `evaluator/reverse_verifier.py`，实现 Math-Shepherd（Wang et al. 2023）思想的推理时版本：**一个步骤的好坏不由裁判主观判断，而由"以该步骤为前提续写推理、到达正确答案的经验概率"决定**。对每个步骤前缀，让 Hy3 以 temperature≈0.7 续写采样 N 次，用 answer_checker 比对最终答案，步骤得分 = 到达正确答案的比例；分数骤降处即为首错步。
+
+15 题实测（`results/reverse_verification_test.json`，264 次调用 112.7s）：
+
+| 组别 | n | LLM judge 判对 | 反向验证器判对 |
+|---|:---:|:---:|:---:|
+| 答案正确、过程正确 | 5 | 5/5 | 5/5（min 分全 ≥0.75，零误伤） |
+| 答案错误、过程确有错 | 5 | 5/5 | 5/5 |
+| CBU 注入（答案对过程错） | 3 | 2/2 | 2/3 |
+
+关键个案：CBU-INJ-001 的续写从注入错误步出发 4/4 全部走向错误答案，分数从 1.0 骤降到 0.0，**精确定位注入步**；CBU-INJ-004 的注入错误不影响结局可达性，反向验证器给满分而 judge 抓住——两者互补。详细方法与局限分析见 `results/reverse_verifier_report.md`。
+
+> ⚠️ 已知局限：选择题 gold 格式会系统性压分、N=4 采样方差较大（稳定定位需 N=8~16）、只惩罚影响结局的错误（方法性失明）。完整训练版步骤奖励模型（PRM）留作未来工作。
+
+### ⚖️ 单 judge vs 多 judge 对比（修复后，158 题子集）
 
 > 📌 本节数据来自 `results/evaluation_results_merged_multi_judge_fixed.json`，其中 149 道为可自动判分题（gradable），9 道 FrontierMath v2 标记为 `manual_check`，因此部分指标分母为 149、部分为 158。
 
@@ -697,8 +732,8 @@ high 风险组（GSM8K/MATH 等常见数据集）答案正确率显著高于 med
 
 - [x] 引入依赖图显式分步格式，增强跳步与循环论证检测
 - [x] 构建可视化 Web 应用，便于非技术用户直接使用
-- [ ] 完成 386 题扩展集的全量生成与三 Judge 评估（已就绪，按需启动）
-- [ ] 探索反向验证器（Math-Shepherd 思想）与细粒度步骤奖励模型，进一步降低误报/漏判
+- [x] 完成 386 题扩展集的全量生成与三 Judge 评估（已扩展为 418 题主实验集全量三裁判评估）
+- [x] 探索反向验证器（Math-Shepherd 思想）与细粒度步骤奖励模型（已实现推理时版本并实测，训练版 PRM 留作未来工作）
 
 ---
 
