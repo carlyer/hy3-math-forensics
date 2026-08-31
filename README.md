@@ -9,7 +9,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](requirements.txt)
 [![vLLM](https://img.shields.io/badge/vLLM-0.22.0-orange)](https://github.com/vllm-project/vllm)
 [![Hy3](https://img.shields.io/badge/Model-Hy3--GPTQ--int4-blueviolet)](https://github.com/Tencent-Hunyuan)
-[![Benchmark](https://img.shields.io/badge/Benchmark-418%20题-success)](dataset/problems_merged_full.jsonl)
+[![Benchmark](https://img.shields.io/badge/Benchmark-418%20题-success)](https://huggingface.co/datasets/yerr2/hy3-math-forensics-dataset)
 [![Judge](https://img.shields.io/badge/Judge-GPT--5.6%20%2B%20Gemini%20%2B%20Hy3-yellow)](evaluator/multi_judge.py)
 
 [🎯 项目背景](#-项目背景) · [🚀 快速开始](#-快速开始) · [📊 评测结果](#-最终评测结果完整主实验集-418-题) · [🔬 评估方法](#-过程评估方法) · [✅ 有效性验证](#-评估器有效性验证修复后) · [📚 数据集](#-数据集)
