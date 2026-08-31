@@ -15,7 +15,7 @@
 [🎯 项目背景](#-项目背景) · [🚀 快速开始](#-快速开始) · [📊 评测结果](#-最终评测结果完整主实验集-418-题) · [🔬 评估方法](#-过程评估方法) · [✅ 有效性验证](#-评估器有效性验证修复后) · [📚 数据集](#-数据集)
 
 > 📢 本项目为「犀牛鸟开源实战任务 · 任务二」个人/活动作品，非腾讯官方发布。
-> 📄 完整项目报告见 [`PROJECT_REPORT.md`](PROJECT_REPORT.md) ｜ 💡 踩坑记录与经验总结见 [`PROJECT_LESSONS.md`](PROJECT_LESSONS.md) ｜ 📦 交付清单见 [`DELIVERABLES.md`](DELIVERABLES.md)
+> 📄 完整项目报告见 [`PROJECT_REPORT.md`](PROJECT_REPORT.md) ｜ 📊 深度分析报告见 [`ANALYSIS_REPORT.md`](ANALYSIS_REPORT.md) ｜ 💡 踩坑记录与经验总结见 [`PROJECT_LESSONS.md`](PROJECT_LESSONS.md) ｜ 📦 交付清单见 [`DELIVERABLES.md`](DELIVERABLES.md)
 
 </div>
 
