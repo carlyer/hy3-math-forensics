@@ -9,10 +9,12 @@
 | Model | `hy3-gptq-int4` |
 
 ---
-'''
-cd hy3-math-eval  
-bash scripts/run_web_app.sh               
-'''
+
+启动应用（在项目根目录执行）：
+
+```bash
+bash scripts/run_web_app.sh
+```
 
 ## 第一段：正确解答 + 过程评估通过
 
