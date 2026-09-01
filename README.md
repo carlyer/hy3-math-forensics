@@ -233,11 +233,30 @@ pip install -r requirements.txt
 通过腾讯混元官方 OpenAI 兼容 API 直接调用 Hy3。在项目根目录创建 `.env` 文件：
 
 ```bash
-# 官方 API 网关（以官方文档为准）
-HY3_API_BASE=https://api.hunyuan.cloud.tencent.com/v1
+# 官方 API 网关（OpenAI 兼容协议）
+HY3_API_BASE=https://tokenhub.tencentmaas.com/v1
 HY3_MODEL_NAME=hy3
-HY3_API_KEY=your_official_api_token   # 在官方控制台申请的 API Token
+HY3_API_KEY=sk-your_official_api_token   # 在官方控制台申请的 API Token（sk- 开头）
 ```
+
+建议先用 curl 验证连通性，能返回 JSON 即接入成功：
+
+```bash
+curl -X POST 'https://tokenhub.tencentmaas.com/v1/chat/completions' \
+  -H 'Authorization: Bearer sk-your_official_api_token' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "model": "hy3",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user", "content": "你好"}
+    ],
+    "stream": false
+  }'
+```
+
+> 💡 **Hy3 是推理模型**：响应中 `reasoning_content` 为思考过程、`content` 为最终回答，本项目客户端（`app/hy3_client.py` 与前端工作台）均已自动兼容，优先取 `content`，为空时回退 `reasoning_content`。
+> 💡 推理模型的思考过程也消耗 `max_tokens`，批量生成时请按 `.env.example` 中的分层建议设置（L1/L2 ≥ 3k，L3/L4 ≥ 6k），避免思考耗尽额度导致回答截断。
 
 **方式 B：自部署 vLLM 服务**
 
@@ -430,6 +449,27 @@ npm run dev
 - **Base URL**：`http://localhost:8787/v1`（使用代理时）或直接填 Hy3 端点
 - **API Key**：本地服务可填 `dummy`，远程服务填真实 key
 - **模型名**：`hy3-gptq-int4`
+
+**🔌 工作台接入官方 API（重点）**
+
+官方网关（`https://tokenhub.tencentmaas.com/v1`）**未开放浏览器跨域（CORS）**，浏览器直连会被拦截并提示"网络请求失败"。这不是网络故障，而是官方 API 仅面向服务端调用的行业惯例（OpenAI 官方 API 同样如此）。解决办法是用项目自带的本地代理中转：
+
+```bash
+# 终端 1：启动代理，上游指向官方网关（代理只转发并补 CORS 头，不记录任何内容）
+HY3_UPSTREAM=https://tokenhub.tencentmaas.com/v1 python3 scripts/hy3_proxy.py 8787
+# 终端 2：启动前端（或直接访问已部署的 7860 静态版）
+cd frontend && npm run dev
+```
+
+然后在页面「⚙ 配置 Hy3 接口」中填：
+
+| 字段 | 官方 API 配置 |
+|---|---|
+| Base URL | `http://localhost:8787/v1` |
+| API Key | `sk-your_official_api_token`（官方 Token，仅存浏览器 localStorage） |
+| 模型名 | `hy3` |
+
+填好后点「测试连接」，显示 `连接成功（finish_reason=stop，tokens=…）` 即接入完成。
 
 > 💡 注意：React 工作台内置了少量 2026 高考数学演示题，自定义题目直接在左侧输入即可。
 
