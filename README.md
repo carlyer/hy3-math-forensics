@@ -29,6 +29,31 @@
 
 ---
 
+## 🖥️ 应用预览
+
+「Hy3 数学过程评估工作台」共四个页面，覆盖从解题、评估到结果分析、案例审计的完整流程：
+
+<table>
+<tr>
+<td width="50%"><img src="demo/demo1.png" alt="解题工作台"/></td>
+<td width="50%"><img src="demo/demo2.png" alt="评测仪表盘"/></td>
+</tr>
+<tr>
+<td align="center"><b>🛠 解题工作台</b><br/>内置演示题库（2026 高考低污染题源）+ 自定义题目输入，接口配置仅存浏览器本地</td>
+<td align="center"><b>📊 评测仪表盘</b><br/>答案/过程/严格过程正确率、CBU 检出率、定位准确率、误报率六大指标 + L1–L4 难度分层 + 错误类型分布</td>
+</tr>
+<tr>
+<td width="50%"><img src="demo/demo3.png" alt="题集与验证"/></td>
+<td width="50%"><img src="demo/demo4.png" alt="案例与方法"/></td>
+</tr>
+<tr>
+<td align="center"><b>📚 题集与验证</b><br/>L1–L4 分层题集构成与来源、注入错误验证集、ProcessBench 方法论对标</td>
+<td align="center"><b>🗂 案例与方法</b><br/>典型 CBU 案例库（答案对但过程不成立）、五层评估架构、十类错误分类体系</td>
+</tr>
+</table>
+
+---
+
 ## 🎯 项目背景
 
 大型语言模型在数学推理任务上往往只输出最终答案，难以判断其推理过程是否严谨。**答案对了，过程就一定对吗？** 本项目针对这一问题，设计并实现了一套多层混合的过程评估方案：
