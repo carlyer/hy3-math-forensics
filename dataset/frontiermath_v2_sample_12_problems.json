@@ -1,0 +1,137 @@
+{
+  "metadata": {
+    "title": "FrontierMath v2 公开样本题（12道）",
+    "source": "Epoch AI - https://epoch.ai/frontiermath",
+    "total_problems": 12,
+    "tier_distribution": {
+      "Tier 1 (HS/Undergrad)": 2,
+      "Tier 2 (Graduate)": 3,
+      "Tier 3 (Graduate/Research)": 3,
+      "Tier 4 (Research)": 4
+    },
+    "note": "完整数据集（338题）为私有，仅公开这12道样本题。v2于2026-06-12发布，修正了v1中42%的题目错误。",
+    "date_compiled": "2026-08-25"
+  },
+  "problems": [
+    {
+      "id": 1,
+      "tier": "Tier 4 (Research)",
+      "difficulty": "High",
+      "subject": "Number Theory, Density of Primes, Order of Integers Modulo Prime, Artin's Conjecture, Inclusion-Exclusion Principle",
+      "technique": "Prime Number Theorem, Chebotarev Density Theorem, Generalized Riemann Hypothesis (GRH), Asymptotic Density, Inclusion-Exclusion Principle",
+      "problem": "Definitions. For a positive integer n, let v_p(n) denote the largest integer v such that p^v | n.\n\nFor p a prime and a ≢ 0 (mod p), we let ord_p(a) denote the smallest positive integer o such that a^o ≡ 1 (mod p). For x > 0, we let\n\nord_{p,x}(a) = ∏_{q≤x, q prime} q^{v_q(ord_p(a))} ∏_{q>x, q prime} q^{v_q(p-1)}.\n\nLet S_x denote the set of primes p for which ord_{p,x}(2) > ord_{p,x}(3), and let d_x denote the density d_x = |S_x| / |{p ≤ x : p is prime}| of S_x in the primes. Let d_∞ = lim_{x→∞} d_x.\n\nCompute ⌊10^6 d_∞⌋.",
+      "answer": "367707",
+      "msc_classification": "11 Number theory"
+    },
+    {
+      "id": 2,
+      "tier": "Tier 3 (Graduate/Research)",
+      "difficulty": "High-Medium",
+      "subject": "Algebra, Polynomial Functions, Galois Theory, Field Theory, Polynomial Roots",
+      "technique": "Polynomial Monodromy, Irreducible Components, Degree of Polynomials, Riemann Existence Theorem, Chebyshev Polynomial",
+      "problem": "Construct a degree 19 polynomial p(x) ∈ ℂ[x] such that X := {p(x) = p(y)} ⊂ ℙ¹ × ℙ¹ has at least 3 (but not all linear) irreducible components over ℂ. Choose p(x) to be odd, monic, have real coefficients and linear coefficient -19 and calculate p(19).",
+      "answer": "1876572071974094803391179",
+      "msc_classification": "14 Algebraic geometry; 20 Group theory and generalizations; 11 Number theory"
+    },
+    {
+      "id": 3,
+      "tier": "Tier 3 (Graduate/Research)",
+      "difficulty": "Medium",
+      "subject": "Recurrence Relations, Prime Moduli, Skolem-Mahler-Lech Theorem, p-adic Numbers",
+      "technique": "Explicit Formula for Recurrence, Skolem-Mahler-Lech Theorem, p-adic Extension of Functions, Valuation Theory",
+      "problem": "Let a_n for n ∈ ℤ be the sequence of integers satisfying the recurrence formula\n\na_n = 198130309625 a_{n-1} + 354973292077 a_{n-2} - 427761277677 a_{n-3} + 370639957 a_{n-4}\n\nwith initial conditions a_i = i for 0 ≤ i ≤ 3. Find the smallest prime p ≡ 4 (mod 7) for which the function ℤ → ℤ given by n ↦ a_n can be extended to a continuous function on ℤ_p.",
+      "answer": "9811",
+      "msc_classification": "11 Number theory"
+    },
+    {
+      "id": 4,
+      "tier": "Tier 2 (Graduate)",
+      "difficulty": "Medium-Low",
+      "subject": "Linear Algebra, Group Theory, Matrix Theory, Coxeter Groups",
+      "technique": "Coxeter Group Relations, Representation Theory of Symmetric Group, Character Theory, Counting Group Orbits",
+      "problem": "Let M_{1000}^4 be the set of 4-tuples of invertible 1000×1000 matrices with coefficients in ℂ. Let S ⊂ M_{1000}^4 be the subset of all tuples (A_1, A_2, A_3, A_4) satisfying the conditions:\n\nA_i^2 = I, for all 1 ≤ i ≤ 4\nA_i A_j = A_j A_i, if {3j-i, 3i-j} ∩ 5ℤ_{>0} = ∅\nA_i A_j A_i^{-1} A_j^{-1} = A_j A_i, if {3j-i, 3i-j} ∩ 5ℤ_{>0} ≠ ∅,\n\nwhere 5ℤ_{>0} refers to the set of positive multiples of 5, i.e., 5ℤ_{>0} = {5, 10, 15, ...}.\n\nThe group G = GL(1000) of invertible complex 1000×1000 matrices acts on S by the formula:\n\nB·(A_1, A_2, A_3, A_4) = (BA_1B^{-1}, BA_2B^{-1}, BA_3B^{-1}, BA_4B^{-1}).\n\nFind the number of orbits of this action, i.e., find |S/G|.",
+      "answer": "(待计算)",
+      "msc_classification": "20 Group theory and generalizations"
+    },
+    {
+      "id": 5,
+      "tier": "Tier 1 (HS/Undergrad)",
+      "difficulty": "Low",
+      "subject": "Algebraic Geometry, Finite Fields, Hasse-Weil Bound",
+      "technique": "Counting Points on Curves, Hasse-Weil Bound, Finite Field Arithmetic, Python Implementation",
+      "problem": "How many nonzero points are there on x³y + y³z + z³x = 0 over 𝔽_{5^{18}} up to scaling?",
+      "answer": "(待计算)",
+      "msc_classification": "14 Algebraic geometry; 11 Number theory"
+    },
+    {
+      "id": 6,
+      "tier": "Tier 1 (HS/Undergrad)",
+      "difficulty": "Low-Medium",
+      "subject": "Combinatorial Geometry",
+      "technique": "Trigonometry, Linearity of Expectation",
+      "problem": "Let 𝒫 be a regular 101-gon of circumradius 1. Draw each diagonal of 𝒫 with probability 0.001. This splits 𝒫 into several closed regions. Let E be the expected value of the perimeter of the region containing the center of 𝒫. Compute ⌊10^9 E⌋.",
+      "answer": "(待计算)",
+      "msc_classification": "52 Convex and discrete geometry"
+    },
+    {
+      "id": 7,
+      "tier": "Tier 4 (Research)",
+      "difficulty": "Extremely High",
+      "subject": "Analysis, sharp constant",
+      "technique": "Developable surfaces, Monge–Ampère equation, Bellman functions, torsion",
+      "problem": "Let c = sup_f ∫_0^1 (f(t)³ + |f(t)|) dt where supremum is taken over all integrable functions f : [0,1] → ℝ such that ∫_0^1 f(t)dt = -10, ∫_0^1 f²(t)dt = 100 + 1/12, and\n\nsup_{J ⊂ [0,1]} (1/|J|) ∫_J |f(t) - (1/|J|)∫_J f(s)ds|² dt ≤ 1/12,\n\nwhere supremum is taken over all subintervals J ⊂ [0,1]. Here |J| denotes the length of the interval.\n\nFind c + 1985/2.",
+      "answer": "(待计算)",
+      "msc_classification": "26 Real functions; 42 Harmonic analysis"
+    },
+    {
+      "id": 8,
+      "tier": "Tier 4 (Research)",
+      "difficulty": "Extremely High",
+      "subject": "Analytic and algebraic number theory, quantum modular forms",
+      "technique": "Class numbers, elliptic curves, harmonic Maass forms, cyclotomic fields",
+      "problem": "Define functions F(z) and G(z) on the upper-half of the complex plane by\n\nF(z) := 1 + Σ_{n=1}^∞ e^{2πi n²z} / ∏_{j=1}^n (1 + e^{2πi jz})²\n\nand\n\nG(z) := ∏_{n=1}^∞ (1 - e^{2πi nz})(1 - e^{2πi (2n-1)z}) / (1 + e^{2πi nz}).\n\nLet ℓ_1 be the smallest prime for which all of the following hold:\n1. D_{ℓ_1} = -ℓ_1 is the discriminant of the ring of integers of ℚ(√{-ℓ_1}).\n2. The class number h(D_{ℓ_1}) of this quadratic field is a prime number ℓ_2 ≥ 5.\n3. The class ℓ_2 (mod ℓ_1) is a primitive root of the multiplicative group (ℤ/ℓ_1ℤ)^×.\n4. The Mordell-Weil group over ℚ of the elliptic curve E(ℚ) : Y² = X³ - ℓ_1² X is ℤ/2ℤ × ℤ/2ℤ.\n\nWith this pair of primes (ℓ_1, ℓ_2), define the algebraic number α by the limit\n\nα := lim_{y→0^+} [F(ℓ_1/(4ℓ_2) + iy) - G(ℓ_1/(4ℓ_2) + iy) + F(...)/G(...) - G(...)/F(...)]\n\nIf P_α(X) ∈ ℚ[X] is its minimal polynomial and K_α is its splitting field, then compute\n\nΩ := (1/[K_α : ℚ]) · (P_α(ℓ_1) + P_α(ℓ_2))^{ℓ_2-1}.",
+      "answer": "(待计算)",
+      "msc_classification": "11 Number theory; 14 Algebraic geometry"
+    },
+    {
+      "id": 9,
+      "tier": "Tier 4 (Research)",
+      "difficulty": "Extremely High",
+      "subject": "Banach spaces",
+      "technique": "Fast-growing functions, general topology",
+      "problem": "Let N denote the largest natural number such that there is a member ⟨x_n : n ∈ ℕ⟩ of the set K described above with x_3 = 1/2, x_N > 1/20, and x_i > x_j whenever 3 ≤ i < j ≤ N. It turns out that N is too large to write down in a reasonable amount of space, so let us ask instead: what is the largest power of 2 dividing N? In other words, find the integer p ≥ 0 such that N = m·2^p for some odd number m.",
+      "answer": "(待计算)",
+      "msc_classification": "46 Functional analysis"
+    },
+    {
+      "id": 10,
+      "tier": "Tier 2 (Graduate)",
+      "difficulty": "Medium",
+      "subject": "Arithmetic geometry",
+      "technique": "Chebotarev density theorem",
+      "problem": "Let U ⊂ ℙH⁰(ℙ²_ℤ, 𝒪(2)) be the space of smooth conics in ℙ²_ℤ, and let Z ⊂ U⁶ be the closed subscheme parametrizing 6-tuples (C_1, ..., C_6) with C_1 tangent to C_2, ..., C_6. Let π: Z → U⁵ be the map induced by the projection onto the last 5 coordinates, and let V ⊂ U⁵ be the dense open subscheme over which π is finite étale.\n\nLet L = lim_{p→∞} (1/#V(𝔽_p)) Σ_{x∈V(𝔽_p)} #π^{-1}(x),\n\nthat is, the limit of the average number of components of the space of conics tangent to 5 smooth conics over 𝔽_p, as p tends to infinity.\n\nFind ⌊100L⌋.",
+      "answer": "(待计算)",
+      "msc_classification": "14 Algebraic geometry; 11 Number theory"
+    },
+    {
+      "id": 11,
+      "tier": "Tier 3 (Graduate/Research)",
+      "difficulty": "Medium",
+      "subject": "Combinatorics",
+      "technique": "Linearity of expectation",
+      "problem": "Let W be the set of finite words with all distinct letters over the alphabet of positive integers. Define a function F: W → W recursively as follows. First, let F(ε) = ε, where ε is the empty word. Given a nonempty word w ∈ W, let F(w) = F(L)F(R)m, where m is the largest number in w and w = LmR. Let n = 10^{12}, and note that F restricts to a function from S_n to itself, where S_n is the symmetric group of order n. Let σ be a permutation chosen uniformly at random from S_n, and let X be the expected number of integers 1 ≤ i < n such that (F(σ))^{-1}(i+1) < (F(σ))^{-1}(i). Compute ⌊X⌋.",
+      "answer": "(待计算)",
+      "msc_classification": "05 Combinatorics"
+    },
+    {
+      "id": 12,
+      "tier": "Tier 2 (Graduate)",
+      "difficulty": "Medium",
+      "subject": "Analytic number theory",
+      "technique": "Asymptotics",
+      "problem": "There are unique constants C, α, β such that the number of solutions to the equation ab + 1 = cde with a, b, c, d, e ∈ ℕ with ab ≤ x is asymptotic to Cx^α log^β x as x → ∞. Compute ⌊1000C⌋.",
+      "answer": "(待计算)",
+      "msc_classification": "11 Number theory"
+    }
+  ]
+}
